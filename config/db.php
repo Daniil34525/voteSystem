@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '',
+    'dsn' => 'pgsql:host=localhost;dbname=vote_system',
+    'username' => 'vote_system',
+    'password' => 'admin',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
