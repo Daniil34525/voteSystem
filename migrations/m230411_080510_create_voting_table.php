@@ -23,7 +23,7 @@ class m230411_080510_create_voting_table extends Migration
         $this->addForeignKey(
             'fk_voting_users_listId',
             'voting',
-            'user_listId',
+            'users_listId',
             'usersList',
             'id',
             'CASCADE'

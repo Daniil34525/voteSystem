@@ -40,8 +40,8 @@ class m230411_080337_create_users_usersList_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_users_usersList_users_id', 'users_userList');
-        $this->dropForeignKey('fk_users_usersList_usersList_id', 'users_userList');
-        $this->dropTable('{{%users_userList}}');
+        $this->dropForeignKey('fk_users_usersList_users_id', 'users_usersList');
+        $this->dropForeignKey('fk_usersList_usersList_id', 'users_usersList');
+        $this->dropTable('{{%users_usersList}}');
     }
 }

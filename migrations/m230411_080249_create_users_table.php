@@ -20,7 +20,7 @@ class m230411_080249_create_users_table extends Migration
             'email' => $this->string()->notNull()->unique()->comment('Почта'),
             'phone' => $this->string()->notNull()->unique()->comment('Телефон'),
             'password_hash' => $this->string()->notNull()->comment('Хеш пароля'),
-            'roleType_id' => $this->string()->notNull()->comment('Роль пользователя'),
+            'roleType_id' => $this->integer()->notNull()->comment('Роль пользователя'),
         ]);
         $this->addForeignKey(
             'fk_users_roleType_id',
