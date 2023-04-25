@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 class Bulletin extends ActiveRecord
@@ -37,5 +38,9 @@ class Bulletin extends ActiveRecord
             'title' => 'Название',
             'created_at' => 'Дата создания',
         ];
+    }
+
+    public function getQuestions():ActiveQuery {
+        return $this->hasMany(Question::class, ['id' => 'bulletinId']); 
     }
 }
