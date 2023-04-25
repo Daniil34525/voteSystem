@@ -15,7 +15,7 @@ class m230407_140000_create_question_table extends Migration
         $this->createTable('{{%question}}',
             [
                 'id' => $this->primaryKey()->comment('Код вопроса'),
-                'title' => $this->string()->notNull()->comment('Название'),
+                'title' => $this->string()->notNull()->comment('Наименование вопроса'),
                 'bulletinId' => $this->integer()->notNull()->comment('Бюллетень'),
                 'overview' => $this->text()->comment('Описание вопроса'),
                 'typeId' => $this->integer()->notNull()->comment('Тип вопроса'),

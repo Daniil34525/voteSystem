@@ -14,7 +14,8 @@ class m230411_080508_create_voter_table extends Migration
     {
         $this->createTable('{{%voter}}', [
             'id' => $this->primaryKey(),
-            'code' => $this->string()->notNull(),
+            'code' => $this->string()->notNull()->comment('Код-пароль'),
+            'created_at' => $this->integer()->notNull()->comment('Дата создания')
         ]);
     }
 
