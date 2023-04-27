@@ -14,12 +14,12 @@ class m230407_140000_create_questions_table extends Migration
     {
         $this->createTable('{{%questions}}',
             [
-                'id' => $this->primaryKey()->comment('Код вопроса'),
-                'question_title' => $this->string()->notNull()->comment('Наименование вопроса'),
-                'bulletin_id' => $this->integer()->comment('Бюллетень'),
-                'overview' => $this->text()->comment('Описание вопроса'),
-                'type_id' => $this->integer()->notNull()->comment('Тип вопроса'),
-                'answer' => $this->json()->comment('Ответ')
+                'id' => $this->primaryKey()->comment('Идентификатор вопроса'),
+                'question_title' => $this->string()->notNull()->comment('Сам вопрос'),
+                'bulletin_id' => $this->integer()->comment('Идентификатор бюллетени'),
+                'overview' => $this->text()->comment('Дополнительное описание сути вопроса'),
+                'type_id' => $this->integer()->notNull()->comment('Идентификтор типа вопроса'),
+                'answer' => $this->json()->comment('Ответы')
             ]
         );
         $this->addForeignKey(

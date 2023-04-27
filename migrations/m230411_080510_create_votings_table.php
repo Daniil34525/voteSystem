@@ -15,16 +15,19 @@ class m230411_080510_create_votings_table extends Migration
         $this->createTable('{{%votings}}',
             [
                 'id' => $this->primaryKey()->comment('id'),
-                'title' => $this->string()->notNull()->comment('Название'),
-                'users_list_id' => $this->integer()->comment('Список пользователей голосования'),
+                'title' => $this->string()->notNull()->comment('Наименование голосования'),
+                'voters_list_id' => $this->integer()->comment('Идентификатор список избирателей'),
+                'voting_type_id' => $this->integer()->notNull()->comment('Идентификатор типа голосования'), 
                 'created_at' => $this->integer()->notNull()->comment('Дата создания голосования')
             ]
         );
+
+        // FR with voters_list table if voting_type_id is suitable:
         $this->addForeignKey(
-            'fk_votings_users_list_id',
+            'fk_votings_voters_list_id',
             'votings',
-            'users_list_id',
-            'users_list',
+            'voters_list_id',
+            'voters_list',
             'id',
             'CASCADE'
         );
@@ -35,7 +38,7 @@ class m230411_080510_create_votings_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_votings_users_list_id', '{{%votings}}');
+        $this->dropForeignKey('fk_votings_voters_list_id', '{{%votings}}');
         $this->dropTable('{{%votings}}');
     }
 }

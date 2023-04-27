@@ -13,8 +13,8 @@ class m230411_080202_create_role_types_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%role_types}}', [
-            'id' => $this->primaryKey(),
-            'title' => $this->string()->notNull()->comment('Название роли'),
+            'id' => $this->primaryKey()->comment('Идентификтор роли'),
+            'title' => $this->string()->notNull()->comment('Наименование роли'),
         ]);
     }
 

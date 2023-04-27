@@ -3,176 +3,93 @@
 namespace app\models;
 
 use Yii;
-use yii\base\Exception;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
 /**
- * @property integer $id
- * @property string $name
- * @property string $middleName
- * @property string $lastName
- * @property string $email
- * @property string $phone
- * @property string $passwordHash
+ * This is the model class for table "users".
  *
- * @property RoleType $roleType
+ * @property int $id Идентификтор пользователя
+ * @property string $name Имя пользователя
+ * @property string|null $middle_name Фамилия пользователя
+ * @property string|null $last_name Отчество пользователя
+ * @property string $email E-mail адрес
+ * @property string $phone Телефон
+ * @property string $password_hash Хеш пароля
+ * @property int $role_type_id Роль пользователя
+ *
+ * @property RoleTypes $roleType
+ * @property UsersList[] $usersLists
+ * @property VotersList[] $voterLists
  */
-class User extends ActiveRecord
+class User extends \yii\db\ActiveRecord
 {
-    public static function tableName(): string
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
     {
-        return 'user';
+        return 'users';
     }
 
-    public function behaviors(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
     {
         return [
-            [
-                'class' => TimestampBehavior::class,
-                'createdAtAttribute' => 'created_at',
-            ],
+            [['name', 'email', 'phone', 'password_hash', 'role_type_id'], 'required'],
+            [['role_type_id'], 'default', 'value' => null],
+            [['role_type_id'], 'integer'],
+            [['name', 'middle_name', 'last_name', 'email', 'phone', 'password_hash'], 'string', 'max' => 255],
+            [['email'], 'unique'],
+            [['phone'], 'unique'],
+            [['role_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RoleTypes::class, 'targetAttribute' => ['role_type_id' => 'id']],
         ];
     }
 
-    public function rules(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
     {
-        return
-            [
-                [['name', 'password_hash', 'email', 'phone', 'roleType_id', 'created_at'], 'required'],
-                ['email', 'email'],
-                [['email', 'phone'], 'unique'],
-                [['name', 'middle_name', 'last_name', 'email', 'phone', 'password_hash'], 'string'],
-                [['id', 'roleType_id', 'created_at'], 'integer']
-            ];
-    }
-
-    public function attributeLabels(): array
-    {
-        return
-            [
-                'id' => 'Id',
-                'name' => 'Имя',
-                'middle_name' => 'Фамилия',
-                'last_name' => 'Отчество',
-                'email' => 'Почта',
-                'phone' => 'Телефон',
-                'password' => 'Пароль',
-            ];
+        return [
+            'id' => 'Идентификтор пользователя',
+            'name' => 'Имя пользователя',
+            'middle_name' => 'Фамилия пользователя',
+            'last_name' => 'Отчество пользователя',
+            'email' => 'E-mail адрес',
+            'phone' => 'Телефон',
+            'password_hash' => 'Хеш пароля',
+            'role_type_id' => 'Роль пользователя',
+        ];
     }
 
     /**
-     * @throws Exception
+     * Gets query for [[RoleType]].
+     *
+     * @return \yii\db\ActiveQuery
      */
-    public function hashPassword()
+    public function getRoleType()
     {
-        $this->passwordHash = Yii::$app->getSecurity()->generatePasswordHash($this->passwordHash);
+        return $this->hasOne(RoleTypes::class, ['id' => 'role_type_id']);
     }
 
     /**
-     * @throws Exception
+     * Gets query for [[UsersLists]].
+     *
+     * @return \yii\db\ActiveQuery
      */
-    public function beforeSave($insert): bool
+    public function getUsersLists()
     {
-        if($insert) $this->hashPassword();
-        return parent::beforeSave($insert);
+        return $this->hasMany(UsersList::class, ['user_id' => 'id']);
     }
 
-    public function getRole(): ActiveQuery
+    /**
+     * Gets query for [[VoterLists]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVoterLists()
     {
-        return $this->hasOne(RoleType::class, ['typeRole_id', 'id']);
+        return $this->hasMany(VotersList::class, ['id' => 'voter_list_id'])->viaTable('users_list', ['user_id' => 'id']);
     }
-
-//    private static $users = [
-//        '100' => [
-//            'id' => '100',
-//            'username' => 'admin',
-//            'password' => 'admin',
-//            'authKey' => 'test100key',
-//            'accessToken' => '100-token',
-//        ],
-//        '101' => [
-//            'id' => '101',
-//            'username' => 'demo',
-//            'password' => 'demo',
-//            'authKey' => 'test101key',
-//            'accessToken' => '101-token',
-//        ],
-//    ];
-//
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public static function findIdentity($id)
-//    {
-//        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public static function findIdentityByAccessToken($token, $type = null)
-//    {
-//        foreach (self::$users as $user) {
-//            if ($user['accessToken'] === $token) {
-//                return new static($user);
-//            }
-//        }
-//
-//        return null;
-//    }
-//
-//    /**
-//     * Finds user by username
-//     *
-//     * @param string $username
-//     * @return static|null
-//     */
-//    public static function findByUsername($username)
-//    {
-//        foreach (self::$users as $user) {
-//            if (strcasecmp($user['username'], $username) === 0) {
-//                return new static($user);
-//            }
-//        }
-//
-//        return null;
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function getId()
-//    {
-//        return $this->id;
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function getAuthKey()
-//    {
-//        return $this->authKey;
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function validateAuthKey($authKey)
-//    {
-//        return $this->authKey === $authKey;
-//    }
-//
-//    /**
-//     * Validates password
-//     *
-//     * @param string $password password to validate
-//     * @return bool if password provided is valid for current user
-//     */
-//    public function validatePassword($password)
-//    {
-//        return $this->password === $password;
-//    }
 }

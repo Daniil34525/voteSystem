@@ -2,43 +2,63 @@
 
 namespace app\models;
 
-use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
+use Yii;
 
 /**
- * @property integer $id
- * @property string $title
- * @property string $voters_id//Чуть позже исправлю момент, вроде бы правильно создать отдельную модель
- * @property integer $created_at
+ * This is the model class for table "answers".
  *
- * @property Question $question
+ * @property int $id Идентификатор вопроса
+ * @property string $title Наименование вопроса
+ * @property string|null $voters Предполагается две колонки: Class::voter, id избирателя
+ * @property int $question_id Идентификатор вопроса
+ *
+ * @property Questions $question
  */
-class Answer extends ActiveRecord
+class Answer extends \yii\db\ActiveRecord
 {
-    public static function tableName(): string
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
     {
-        return 'answer';
+        return 'answers';
     }
 
-    public function rules(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
     {
         return [
-            [['id', 'title', 'question_id'], 'required'], 
-            ['voters_id', 'safe']
+            [['title', 'question_id'], 'required'],
+            [['voters'], 'safe'],
+            [['question_id'], 'default', 'value' => null],
+            [['question_id'], 'integer'],
+            [['title'], 'string', 'max' => 255],
+            [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questions::class, 'targetAttribute' => ['question_id' => 'id']],
         ];
     }
 
-    public function attributeLabels(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
     {
         return [
+            'id' => 'Идентификатор вопроса',
             'title' => 'Наименование вопроса',
-            'voters_id' => 'Класс голосующего : идентификатор голосущего', 
-            'question_id' => 'Идентификатор вопроса'
+            'voters' => 'Предполагается две колонки: Class::voter, id избирателя',
+            'question_id' => 'Идентификатор вопроса',
         ];
     }
 
-    public function getQuestion():ActiveQuery
+    /**
+     * Gets query for [[Question]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuestion()
     {
-        return $this->hasOne(Question::class, ['question_id' => 'id']); 
+        return $this->hasOne(Questions::class, ['id' => 'question_id']);
     }
 }

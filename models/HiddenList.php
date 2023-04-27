@@ -5,22 +5,22 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "users_list".
+ * This is the model class for table "hiddens_list".
  *
  * @property int $voter_list_id Идентификатор списка избирателей
- * @property int $user_id Идентификатор пользователя
+ * @property int $hidden_id Голосование
  *
- * @property Users $user
+ * @property Hiddens $hidden
  * @property VotersList $voterList
  */
-class UserList extends \yii\db\ActiveRecord
+class HiddenList extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'users_list';
+        return 'hiddens_list';
     }
 
     /**
@@ -29,11 +29,11 @@ class UserList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['voter_list_id', 'user_id'], 'required'],
-            [['voter_list_id', 'user_id'], 'default', 'value' => null],
-            [['voter_list_id', 'user_id'], 'integer'],
-            [['voter_list_id', 'user_id'], 'unique', 'targetAttribute' => ['voter_list_id', 'user_id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['voter_list_id', 'hidden_id'], 'required'],
+            [['voter_list_id', 'hidden_id'], 'default', 'value' => null],
+            [['voter_list_id', 'hidden_id'], 'integer'],
+            [['voter_list_id', 'hidden_id'], 'unique', 'targetAttribute' => ['voter_list_id', 'hidden_id']],
+            [['hidden_id'], 'exist', 'skipOnError' => true, 'targetClass' => Hiddens::class, 'targetAttribute' => ['hidden_id' => 'id']],
             [['voter_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => VotersList::class, 'targetAttribute' => ['voter_list_id' => 'id']],
         ];
     }
@@ -45,18 +45,18 @@ class UserList extends \yii\db\ActiveRecord
     {
         return [
             'voter_list_id' => 'Идентификатор списка избирателей',
-            'user_id' => 'Идентификатор пользователя',
+            'hidden_id' => 'Голосование',
         ];
     }
 
     /**
-     * Gets query for [[User]].
+     * Gets query for [[Hidden]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getHidden()
     {
-        return $this->hasOne(Users::class, ['id' => 'user_id']);
+        return $this->hasOne(Hiddens::class, ['id' => 'hidden_id']);
     }
 
     /**
