@@ -20,7 +20,7 @@ class m230425_190033_create_answer_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'FK_answer_question_id', 
+            'fk_answer_question_id', 
             'answer', 
             'question_id', 
             'question', 

@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%questionType}}`.
  */
-class m230403_061045_create_questionType_table extends Migration
+class m230403_061045_create_question_type_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%questionType}}',
+        $this->createTable('{{%question_type}}',
             [
                 'id' => $this->primaryKey(),
                 'title' => $this->string()->notNull()->comment('Название')
@@ -25,6 +25,6 @@ class m230403_061045_create_questionType_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%questionType}}');
+        $this->dropTable('{{%question_type}}');
     }
 }

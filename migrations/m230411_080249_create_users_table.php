@@ -20,13 +20,13 @@ class m230411_080249_create_users_table extends Migration
             'email' => $this->string()->notNull()->unique()->comment('Почта'),
             'phone' => $this->string()->notNull()->unique()->comment('Телефон'),
             'password_hash' => $this->string()->notNull()->comment('Хеш пароля'),
-            'roleType_id' => $this->integer()->notNull()->comment('Роль пользователя'),
+            'role_type_id' => $this->integer()->notNull()->comment('Роль пользователя'),
         ]);
         $this->addForeignKey(
-            'fk_users_roleType_id',
+            'fk_users_role_type_id',
             'users',
-            'roleType_id',
-            'roleType',
+            'role_type_id',
+            'role_type',
             'id',
             'CASCADE'
         );
@@ -37,7 +37,7 @@ class m230411_080249_create_users_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_users_roleType_id', 'users');
+        $this->dropForeignKey('fk_users_role_type_id', 'users');
         $this->dropTable('{{%users}}');
     }
 }
