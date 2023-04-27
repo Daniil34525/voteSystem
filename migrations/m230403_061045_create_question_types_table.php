@@ -3,18 +3,18 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%votingType}}`.
+ * Handles the creation of table `{{%questionType}}`.
  */
-class m230403_064154_create_voting_type_table extends Migration
+class m230403_061045_create_question_types_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%voting_type}}',
+        $this->createTable('{{%question_types}}',
             [
-                'id' => $this->primaryKey()->comment('id'),
+                'id' => $this->primaryKey(),
                 'title' => $this->string()->notNull()->comment('Название')
             ]
         );
@@ -25,6 +25,6 @@ class m230403_064154_create_voting_type_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%voting_type}}');
+        $this->dropTable('{{%question_types}}');
     }
 }

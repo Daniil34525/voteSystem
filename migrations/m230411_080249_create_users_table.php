@@ -23,10 +23,10 @@ class m230411_080249_create_users_table extends Migration
             'role_type_id' => $this->integer()->notNull()->comment('Роль пользователя'),
         ]);
         $this->addForeignKey(
-            'fk_users_role_type_id',
+            'fk_users_role_types_id',
             'users',
             'role_type_id',
-            'role_type',
+            'role_types',
             'id',
             'CASCADE'
         );
@@ -37,7 +37,7 @@ class m230411_080249_create_users_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_users_role_type_id', 'users');
+        $this->dropForeignKey('fk_users_role_types_id', '{{%users}}');
         $this->dropTable('{{%users}}');
     }
 }
