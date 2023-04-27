@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%answer}}`.
  */
-class m230425_190033_create_answer_table extends Migration
+class m230425_190033_create_answers_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%answer}}', [
+        $this->createTable('{{%answers}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull()->comment('Наименование вопроса'),
             'voters_id' => $this->json()->comment("Предполагается две колонки: Class::voter, id_voter"), 
@@ -21,9 +21,9 @@ class m230425_190033_create_answer_table extends Migration
 
         $this->addForeignKey(
             'fk_answer_question_id', 
-            'answer', 
+            'answers', 
             'question_id', 
-            'question', 
+            'questions', 
             'id', 
             'CASCADE'
         );
@@ -34,6 +34,6 @@ class m230425_190033_create_answer_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%answer}}');
+        $this->dropTable('{{%answers}}');
     }
 }

@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%voting}}`.
  */
-class m230411_080510_create_voting_table extends Migration
+class m230411_080510_create_votings_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%voting}}',
+        $this->createTable('{{%votings}}',
             [
                 'id' => $this->primaryKey()->comment('id'),
                 'title' => $this->string()->notNull()->comment('Название'),
@@ -21,8 +21,8 @@ class m230411_080510_create_voting_table extends Migration
             ]
         );
         $this->addForeignKey(
-            'fk_voting_users_list_id',
-            'voting',
+            'fk_votings_users_list_id',
+            'votings',
             'users_list_id',
             'users_list',
             'id',
@@ -35,7 +35,7 @@ class m230411_080510_create_voting_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_voting_users_list_id', 'voting');
-        $this->dropTable('{{%voting}}');
+        $this->dropForeignKey('fk_votings_users_list_id', '{{%votings}}');
+        $this->dropTable('{{%votings}}');
     }
 }

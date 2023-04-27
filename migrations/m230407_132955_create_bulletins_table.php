@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%bulletin}}`.
  */
-class m230407_132955_create_bulletin_table extends Migration
+class m230407_132955_create_bulletins_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%bulletin}}',
+        $this->createTable('{{%bulletins}}',
             [
                 'id' => $this->primaryKey()->comment('Код бюллетени'),
                 'title' => $this->string()->notNull()->comment('Название'),
@@ -26,6 +26,6 @@ class m230407_132955_create_bulletin_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%bulletin}}');
+        $this->dropTable('{{%bulletins}}');
     }
 }

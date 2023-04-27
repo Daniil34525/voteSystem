@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%question}}`.
  */
-class m230407_140000_create_question_table extends Migration
+class m230407_140000_create_questions_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%question}}',
+        $this->createTable('{{%questions}}',
             [
                 'id' => $this->primaryKey()->comment('Код вопроса'),
                 'question_title' => $this->string()->notNull()->comment('Наименование вопроса'),
@@ -23,18 +23,18 @@ class m230407_140000_create_question_table extends Migration
             ]
         );
         $this->addForeignKey(
-            'fk_question_type_id',
-            'question',
+            'fk_question_types_id',
+            'questions',
             'type_id',
-            'question_type',
+            'question_types',
             'id',
             'CASCADE'
         );
         $this->addForeignKey(
-            'fk_question_bulletin_id',
-            'question',
+            'fk_questions_bulletin_id',
+            'questions',
             'bulletin_id',
-            'bulletin',
+            'bulletins',
             'id',
             'CASCADE'
         );
@@ -45,8 +45,8 @@ class m230407_140000_create_question_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_question_bulletin_id', '{{%question}}');
-        $this->dropForeignKey('fk_question_type_id', '{{%question}}');
-        $this->dropTable('{{%question}}');
+        $this->dropForeignKey('fk_questions_bulletin_id', '{{%questions}}');
+        $this->dropForeignKey('fk_question_types_id', '{{%questions}}');
+        $this->dropTable('{{%questions}}');
     }
 }
