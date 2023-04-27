@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%usersList}}`.
  */
-class m230411_080336_create_usersList_table extends Migration
+class m230411_080336_create_users_list_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%usersList}}', [
+        $this->createTable('{{%users_list}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull()->comment('Наименование списка пользователей'),
             'created_at' => $this->integer()->notNull()->comment('Дата создания списка'),
@@ -26,6 +26,6 @@ class m230411_080336_create_usersList_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%usersList}}');
+        $this->dropTable('{{%users_list}}');
     }
 }

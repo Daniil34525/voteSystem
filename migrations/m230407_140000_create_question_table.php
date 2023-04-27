@@ -15,25 +15,25 @@ class m230407_140000_create_question_table extends Migration
         $this->createTable('{{%question}}',
             [
                 'id' => $this->primaryKey()->comment('Код вопроса'),
-                'title' => $this->string()->notNull()->comment('Наименование вопроса'),
-                'bulletinId' => $this->integer()->notNull()->comment('Бюллетень'),
+                'question_title' => $this->string()->notNull()->comment('Наименование вопроса'),
+                'bulletin_id' => $this->integer()->comment('Бюллетень'),
                 'overview' => $this->text()->comment('Описание вопроса'),
-                'typeId' => $this->integer()->notNull()->comment('Тип вопроса'),
+                'type_id' => $this->integer()->notNull()->comment('Тип вопроса'),
                 'answer' => $this->json()->comment('Ответ')
             ]
         );
         $this->addForeignKey(
-            'fk_question_typeId',
+            'fk_question_type_id',
             'question',
-            'typeId',
-            'questionType',
+            'type_id',
+            'question_type',
             'id',
             'CASCADE'
         );
         $this->addForeignKey(
-            'fk_question_bulletinId',
+            'fk_question_bulletin_id',
             'question',
-            'bulletinId',
+            'bulletin_id',
             'bulletin',
             'id',
             'CASCADE'
@@ -45,8 +45,8 @@ class m230407_140000_create_question_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_question_bulletinId', '{{%question}}');
-        $this->dropForeignKey('fk_question_typeId', '{{%question}}');
+        $this->dropForeignKey('fk_question_bulletin_id', '{{%question}}');
+        $this->dropForeignKey('fk_question_type_id', '{{%question}}');
         $this->dropTable('{{%question}}');
     }
 }
