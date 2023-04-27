@@ -5,21 +5,19 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "question_types".
+ * This is the model class for table "voting_types".
  *
- * @property int $id
+ * @property int $id id
  * @property string $title Название
- *
- * @property Questions[] $questions
  */
-class QuestionType extends \yii\db\ActiveRecord
+class VottingType extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'question_types';
+        return 'voting_types';
     }
 
     /**
@@ -39,18 +37,8 @@ class QuestionType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'id',
             'title' => 'Название',
         ];
-    }
-
-    /**
-     * Gets query for [[Questions]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getQuestions()
-    {
-        return $this->hasMany(Questions::class, ['type_id' => 'id']);
     }
 }

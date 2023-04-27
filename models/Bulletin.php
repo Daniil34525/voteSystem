@@ -2,45 +2,81 @@
 
 namespace app\models;
 
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
+use Yii;
 
-class Bulletin extends ActiveRecord
+/**
+ * This is the model class for table "bulletins".
+ *
+ * @property int $id Код бюллетени
+ * @property string $title Название
+ * @property int $created_at Дата создания
+ *
+ * @property BulletinsList[] $bulletinsLists
+ * @property Questions[] $questions
+ * @property Votings[] $votings
+ */
+class Bulletin extends \yii\db\ActiveRecord
 {
-    public static function tableName(): string
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
     {
-        return 'bulletin';
+        return 'bulletins';
     }
 
-    public function behaviors(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
     {
         return [
-            [
-                'class' => TimestampBehavior::class,
-                'createdAtAttribute' => 'created_at',
-            ],
+            [['title', 'created_at'], 'required'],
+            [['created_at'], 'default', 'value' => null],
+            [['created_at'], 'integer'],
+            [['title'], 'string', 'max' => 255],
         ];
     }
 
-    public function rules(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
     {
         return [
-            ['created_at', 'required'],
-            ['title', 'string'],
-            [['id', 'created_at'], 'integer'],
-        ];
-    }
-
-    public function attributeLabels(): array
-    {
-        return [
+            'id' => 'Код бюллетени',
             'title' => 'Название',
             'created_at' => 'Дата создания',
         ];
     }
 
-    public function getQuestions():ActiveQuery {
-        return $this->hasMany(Question::class, ['id' => 'bulletinId']); 
+    /**
+     * Gets query for [[BulletinsLists]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBulletinsLists()
+    {
+        return $this->hasMany(BulletinsList::class, ['bulletin_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Questions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuestions()
+    {
+        return $this->hasMany(Questions::class, ['bulletin_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Votings]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVotings()
+    {
+        return $this->hasMany(Votings::class, ['id' => 'voting_id'])->viaTable('bulletins_list', ['bulletin_id' => 'id']);
     }
 }

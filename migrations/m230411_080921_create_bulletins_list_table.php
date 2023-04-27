@@ -13,8 +13,8 @@ class m230411_080921_create_bulletins_list_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%bulletins_list}}', [
-            'voting_id' => $this->integer()->notNull()->comment('Голосование'),
-            'bulletin_id' => $this->integer()->notNull()->comment('Бюллетень'),
+            'voting_id' => $this->integer()->notNull()->comment('Идентификатор голосования'),
+            'bulletin_id' => $this->integer()->notNull()->comment('Идентификатор бюллетени'),
         ]);
         
         $this->addPrimaryKey(
@@ -48,6 +48,7 @@ class m230411_080921_create_bulletins_list_table extends Migration
     {
         $this->dropForeignKey('fk_users_bulletins_list_voting_id', '{{%bulletins_list}}');
         $this->dropForeignKey('fk_users_bulletins_list_bulletin_id', '{{%bulletins_list}}');
+        $this->dropPrimaryKey('pk_bulletins_list_bulletin_id_voting_id', '{{%bulletins_list}}');
         $this->dropTable('{{%bulletins_list}}');
     }
 }

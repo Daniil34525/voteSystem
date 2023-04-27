@@ -13,10 +13,10 @@ class m230425_190033_create_answers_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%answers}}', [
-            'id' => $this->primaryKey(),
+            'id' => $this->primaryKey()->comment('Идентификатор вопроса'), 
             'title' => $this->string()->notNull()->comment('Наименование вопроса'),
-            'voters_id' => $this->json()->comment("Предполагается две колонки: Class::voter, id_voter"), 
-            'question_id' => $this->integer()->notNull()
+            'voters' => $this->json()->comment("Предполагается две колонки: Class::voter, id избирателя"), 
+            'question_id' => $this->integer()->notNull()->comment('Идентификатор вопроса')
         ]);
 
         $this->addForeignKey(

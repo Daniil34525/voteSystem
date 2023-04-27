@@ -5,21 +5,21 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "question_types".
+ * This is the model class for table "role_types".
  *
- * @property int $id
- * @property string $title Название
+ * @property int $id Идентификтор роли
+ * @property string $title Наименование роли
  *
- * @property Questions[] $questions
+ * @property Users[] $users
  */
-class QuestionType extends \yii\db\ActiveRecord
+class RoleTypes extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'question_types';
+        return 'role_types';
     }
 
     /**
@@ -39,18 +39,18 @@ class QuestionType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Название',
+            'id' => 'Идентификтор роли',
+            'title' => 'Наименование роли',
         ];
     }
 
     /**
-     * Gets query for [[Questions]].
+     * Gets query for [[Users]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getQuestions()
+    public function getUsers()
     {
-        return $this->hasMany(Questions::class, ['type_id' => 'id']);
+        return $this->hasMany(Users::class, ['role_type_id' => 'id']);
     }
 }
