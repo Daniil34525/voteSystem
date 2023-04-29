@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "answers".
@@ -14,12 +15,12 @@ use Yii;
  *
  * @property Questions $question
  */
-class Answer extends \yii\db\ActiveRecord
+class Answers extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'answers';
     }
@@ -27,7 +28,7 @@ class Answer extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['title', 'question_id'], 'required'],
@@ -42,7 +43,7 @@ class Answer extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'Идентификатор вопроса',
@@ -53,11 +54,11 @@ class Answer extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Question]].
+     * Gets query for [[Questions]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getQuestion()
+    public function getQuestion(): ActiveQuery
     {
         return $this->hasOne(Questions::class, ['id' => 'question_id']);
     }
