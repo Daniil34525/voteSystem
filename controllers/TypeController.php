@@ -3,19 +3,48 @@
 namespace app\controllers;
 
 use app\models\QuestionTypes;
+use app\models\RoleTypes;
+use app\models\TypeSearch;
+use app\models\VotingTypes;
 use Exception;
 use Yii;
 use yii\web\Controller;
+use yii\web\Response;
 
 class TypeController extends Controller
 {
     /** @var string[] Обрабатываемые модели (короткое и полное имя класса) */
     const MODELS = [
-        'QuestionType' => QuestionTypes::class,
+        'QuestionTypes' => QuestionTypes::class,
+        'RoleTypes' => RoleTypes::class,
+        'VotingTypes' => VotingTypes::class
+    ];
+/** @var string[] Названия модели (полное имя и название класса) */
+    const TITLE = [
+        QuestionTypes::class => 'Типы вопросов',
+        RoleTypes::class => 'Типы ролей',
+        VotingTypes::class => 'Типы голосований'
     ];
 
     /** @var string Полное имя класса обрабатываемой модели. Вычисляется в init по значению гет-параметра $model */
     private string $modelClass;
+
+    /** @var string Короткое имя класса. См в init */
+    private string $shortModelClass;
+
+//    /** {@inheritdoc} */
+//    public function behaviors(): array
+//    {
+//        return array_merge(parent::behaviors(), [
+//            'ajax' => [
+//                'class' => AjaxFilter::class,
+//                'only' => [
+//                    'create',
+//                    'update',
+//                ],
+//            ],
+//        ]);
+//    }
 
     /**
      *  ВНИМАНИЕ!! Для всех экшенов должен приходить обязательный параметр GET[model] с коротким именем класса
@@ -34,32 +63,65 @@ class TypeController extends Controller
             throw new Exception('Некорректное значение параметра $model');
         }
 
+        $this->shortModelClass = $shortModelClass;
         $this->modelClass = self::MODELS[$shortModelClass];
     }
 
-    public function actionCreate()
+    public function actionUpdateCreate($id = null)
     {
-        $modelObject = new $this->modelClass();
+        if (!is_null($id)) {
+            $modelObject = Yii::createObject($this->modelClass);
+            $model = $modelObject->findOne($id);
+        } else $model = new $this->modelClass();
 
-        if ($modelObject->load(Yii::$app->request->post()) && $modelObject->save()) {
-            return $this->asJson(['success' => true]);
+        $title = self::TITLE[$this->modelClass];
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index', 'model' => $this->shortModelClass]);
+            //return $this->asJson(['success' => true]);
         }
-        return $this->render('create_view', ['model' => $modelObject]);
+        return $this->render('update_create', ['model' => $model, 'title' => $title]);
     }
 
-//    public function actionDelete(): string
-//    {
-//        return $this->render('delete');
-//    }
+    public function actionDelete($id): Response
+    {
+        $modelObject = Yii::createObject($this->modelClass);
+        $model = $modelObject->findOne($id);
+
+        if (!is_null($model)) $model->delete();
+
+        return $this->redirect(['index', 'model' => $this->shortModelClass]);
+    }
 
     public function actionIndex(): string
     {
-        return $this->render('index', ['model' => $this->modelClass]);
+        $searchModel = new TypeSearch(['modelClass' => $this->modelClass]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $title = self::TITLE[$this->modelClass];
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'title' => $title,
+            'modelClass' => $this->modelClass
+        ]);
     }
 
-    public function actionView(): string
-    {
-        return $this->render('create_view');
-    }
-
+//    public function actionUpdate(int $id)
+//    {
+//        try {
+//            /** @var $modelClass Type */
+//            $modelClass = $this->modelClass;
+//            $modelObject = $modelClass::findOne($id);
+//
+//            if ($modelObject->load(Yii::$app->request->post()) && $modelObject->save()) {
+//                return $this->asJson(['success' => true]);
+//            }
+//
+//            return $this->renderAjax('update_create', ['model' => $modelObject]);
+//
+//        } catch (Exception $e) {
+//            return $this->asJson(['result' => 'err', 'message' => $e->getMessage()]);
+//        }
+//    }
 }

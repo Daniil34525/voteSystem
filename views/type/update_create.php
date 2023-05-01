@@ -6,22 +6,20 @@
 use app\models\Type;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-$attribute = $model->title;
-$isActionView = (Yii::$app->controller->action->id == 'view');
 ?>
 
 <div class="card" style="margin-bottom: 0">
     <div class="card-body">
         <?php $form = ActiveForm::begin([
-            'id' => 'form-one-field-model',
+            'id' => 'type-model',
             'options' => ['enctype' => 'multipart/form-data']
         ]) ?>
 
-        <?php $label = $model->getAttributeLabel($attribute) ?>
-        <?php $input = Html::activeTextInput($model, $attribute, ['class' => 'form-control']) ?>
-
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         <?= Html::activeHiddenInput($model, 'id') ?>
+        <div class="form-group">
+            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        </div>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
