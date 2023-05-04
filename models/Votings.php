@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "votings".
@@ -17,12 +18,12 @@ use Yii;
  * @property BulletinsList[] $bulletinsLists
  * @property VotersList $votersList
  */
-class Voting extends \yii\db\ActiveRecord
+class Votings extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'votings';
     }
@@ -30,7 +31,7 @@ class Voting extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['title', 'voting_type_id', 'created_at'], 'required'],
@@ -44,7 +45,7 @@ class Voting extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'id',
@@ -58,9 +59,9 @@ class Voting extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Bulletins]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBulletins()
+    public function getBulletins(): ActiveQuery
     {
         return $this->hasMany(Bulletins::class, ['id' => 'bulletin_id'])->viaTable('bulletins_list', ['voting_id' => 'id']);
     }
@@ -68,9 +69,9 @@ class Voting extends \yii\db\ActiveRecord
     /**
      * Gets query for [[BulletinsLists]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBulletinsLists()
+    public function getBulletinsLists(): ActiveQuery
     {
         return $this->hasMany(BulletinsList::class, ['voting_id' => 'id']);
     }
@@ -78,9 +79,9 @@ class Voting extends \yii\db\ActiveRecord
     /**
      * Gets query for [[VotersList]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getVotersList()
+    public function getVotersList(): ActiveQuery
     {
         return $this->hasOne(VotersList::class, ['id' => 'voters_list_id']);
     }

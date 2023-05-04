@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "users_list".
@@ -13,12 +14,12 @@ use Yii;
  * @property Users $user
  * @property VotersList $voterList
  */
-class UserList extends \yii\db\ActiveRecord
+class UsersList extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'users_list';
     }
@@ -26,7 +27,7 @@ class UserList extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['voter_list_id', 'user_id'], 'required'],
@@ -41,7 +42,7 @@ class UserList extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'voter_list_id' => 'Идентификатор списка избирателей',
@@ -52,9 +53,9 @@ class UserList extends \yii\db\ActiveRecord
     /**
      * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUser()
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(Users::class, ['id' => 'user_id']);
     }
@@ -62,9 +63,9 @@ class UserList extends \yii\db\ActiveRecord
     /**
      * Gets query for [[VoterList]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getVoterList()
+    public function getVoterList(): ActiveQuery
     {
         return $this->hasOne(VotersList::class, ['id' => 'voter_list_id']);
     }

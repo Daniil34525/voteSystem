@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "users".
@@ -20,12 +21,12 @@ use Yii;
  * @property UsersList[] $usersLists
  * @property VotersList[] $voterLists
  */
-class User extends \yii\db\ActiveRecord
+class Users extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'users';
     }
@@ -33,7 +34,7 @@ class User extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name', 'email', 'phone', 'password_hash', 'role_type_id'], 'required'],
@@ -49,7 +50,7 @@ class User extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'Идентификтор пользователя',
@@ -66,9 +67,9 @@ class User extends \yii\db\ActiveRecord
     /**
      * Gets query for [[RoleType]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getRoleType()
+    public function getRoleType(): ActiveQuery
     {
         return $this->hasOne(RoleTypes::class, ['id' => 'role_type_id']);
     }
@@ -76,9 +77,9 @@ class User extends \yii\db\ActiveRecord
     /**
      * Gets query for [[UsersLists]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUsersLists()
+    public function getUsersLists(): ActiveQuery
     {
         return $this->hasMany(UsersList::class, ['user_id' => 'id']);
     }
@@ -86,9 +87,9 @@ class User extends \yii\db\ActiveRecord
     /**
      * Gets query for [[VoterLists]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getVoterLists()
+    public function getVoterLists(): ActiveQuery
     {
         return $this->hasMany(VotersList::class, ['id' => 'voter_list_id'])->viaTable('users_list', ['user_id' => 'id']);
     }

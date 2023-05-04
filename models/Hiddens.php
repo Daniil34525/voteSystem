@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "hiddens".
@@ -13,12 +14,12 @@ use Yii;
  * @property HiddensList[] $hiddensLists
  * @property VotersList[] $voterLists
  */
-class Hidden extends \yii\db\ActiveRecord
+class Hiddens extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'hiddens';
     }
@@ -26,7 +27,7 @@ class Hidden extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['code'], 'required'],
@@ -37,7 +38,7 @@ class Hidden extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'Идентифактор анонимного участника',
@@ -48,9 +49,9 @@ class Hidden extends \yii\db\ActiveRecord
     /**
      * Gets query for [[HiddensLists]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getHiddensLists()
+    public function getHiddensLists(): ActiveQuery
     {
         return $this->hasMany(HiddensList::class, ['hidden_id' => 'id']);
     }
@@ -58,9 +59,9 @@ class Hidden extends \yii\db\ActiveRecord
     /**
      * Gets query for [[VoterLists]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getVoterLists()
+    public function getVoterLists(): ActiveQuery
     {
         return $this->hasMany(VotersList::class, ['id' => 'voter_list_id'])->viaTable('hiddens_list', ['hidden_id' => 'id']);
     }

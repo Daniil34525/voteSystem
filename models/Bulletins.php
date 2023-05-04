@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "bulletins".
@@ -15,12 +16,12 @@ use Yii;
  * @property Questions[] $questions
  * @property Votings[] $votings
  */
-class Bulletin extends \yii\db\ActiveRecord
+class Bulletins extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'bulletins';
     }
@@ -28,7 +29,7 @@ class Bulletin extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['title', 'created_at'], 'required'],
@@ -41,7 +42,7 @@ class Bulletin extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'Код бюллетени',
@@ -53,9 +54,9 @@ class Bulletin extends \yii\db\ActiveRecord
     /**
      * Gets query for [[BulletinsLists]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBulletinsLists()
+    public function getBulletinsLists(): ActiveQuery
     {
         return $this->hasMany(BulletinsList::class, ['bulletin_id' => 'id']);
     }
@@ -63,9 +64,9 @@ class Bulletin extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Questions]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getQuestions()
+    public function getQuestions(): ActiveQuery
     {
         return $this->hasMany(Questions::class, ['bulletin_id' => 'id']);
     }
@@ -73,9 +74,9 @@ class Bulletin extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Votings]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getVotings()
+    public function getVotings(): ActiveQuery
     {
         return $this->hasMany(Votings::class, ['id' => 'voting_id'])->viaTable('bulletins_list', ['bulletin_id' => 'id']);
     }

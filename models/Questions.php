@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "questions".
@@ -18,12 +19,12 @@ use Yii;
  * @property Bulletins $bulletin
  * @property QuestionTypes $type
  */
-class Question extends \yii\db\ActiveRecord
+class Questions extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'questions';
     }
@@ -31,7 +32,7 @@ class Question extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['question_title', 'type_id'], 'required'],
@@ -48,7 +49,7 @@ class Question extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'Идентификатор вопроса',
@@ -63,19 +64,19 @@ class Question extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Answers]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getAnswers()
+    public function getAnswers(): ActiveQuery
     {
         return $this->hasMany(Answers::class, ['question_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Bulletin]].
+     * Gets query for [[Bulletins]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBulletin()
+    public function getBulletin(): ActiveQuery
     {
         return $this->hasOne(Bulletins::class, ['id' => 'bulletin_id']);
     }
@@ -83,9 +84,9 @@ class Question extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Type]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getType()
+    public function getType(): ActiveQuery
     {
         return $this->hasOne(QuestionTypes::class, ['id' => 'type_id']);
     }

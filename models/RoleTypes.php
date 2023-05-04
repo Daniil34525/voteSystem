@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "role_types".
@@ -12,44 +12,30 @@ use Yii;
  *
  * @property Users[] $users
  */
-class RoleTypes extends \yii\db\ActiveRecord
+class RoleTypes extends Type
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public static function getTableName(): string
     {
         return 'role_types';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['title'], 'required'],
-            [['title'], 'string', 'max' => 255],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'Идентификтор роли',
-            'title' => 'Наименование роли',
-        ];
-    }
+//    /**
+//     * {@inheritdoc}
+//     */
+//    public function attributeLabels(): array
+//    {
+//        return [
+//            'id' => 'Идентификтор роли',
+//            'title' => 'Наименование роли',
+//        ];
+//    }
 
     /**
      * Gets query for [[Users]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUsers()
+    public function getUsers(): ActiveQuery
     {
         return $this->hasMany(Users::class, ['role_type_id' => 'id']);
     }

@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "bulletins_list".
@@ -13,12 +14,12 @@ use Yii;
  * @property Bulletins $bulletin
  * @property Votings $voting
  */
-class BulletinList extends \yii\db\ActiveRecord
+class BulletinsList extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'bulletins_list';
     }
@@ -26,7 +27,7 @@ class BulletinList extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['voting_id', 'bulletin_id'], 'required'],
@@ -41,7 +42,7 @@ class BulletinList extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'voting_id' => 'Идентификатор голосования',
@@ -50,11 +51,11 @@ class BulletinList extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Bulletin]].
+     * Gets query for [[Bulletins]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBulletin()
+    public function getBulletin(): ActiveQuery
     {
         return $this->hasOne(Bulletins::class, ['id' => 'bulletin_id']);
     }
@@ -62,9 +63,9 @@ class BulletinList extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Voting]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getVoting()
+    public function getVoting(): ActiveQuery
     {
         return $this->hasOne(Votings::class, ['id' => 'voting_id']);
     }
