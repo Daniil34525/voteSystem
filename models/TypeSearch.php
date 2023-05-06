@@ -26,9 +26,22 @@ class TypeSearch extends Model
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'title' => [
+                        'asc' => ['title' => SORT_ASC],
+                        'desc' => ['title' => SORT_DESC]
+                    ],
+                    'id' => [
+                        'asc' => ['id' => SORT_ASC],
+                        'desc' => ['id' => SORT_DESC]
+                    ]
+                ]
+            ]
         ]);
 
         $this->load($params);
+
         if (!$this->validate()) {
             return $dataProvider;
         }
