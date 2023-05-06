@@ -14,6 +14,8 @@ use yii\widgets\Pjax;
 
 $this->title = $title;
 
+$this->params['breadcrumbs'][] = $this->title;
+
 $shortClassName = basename(str_replace('\\', '/', $modelClass));
 //Предполагалось сделать модалки под создание и обновление одной модели в списке, и ajax-ом обновлять.
 //Решил отложить для экономии времени, не работало корректно только обновление.

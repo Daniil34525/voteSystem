@@ -6,13 +6,18 @@
 use app\models\Type;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
+
+$this->title = $title; 
+$this->params['breadcrumbs'][] = ['label' => $title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = "Создание";
 ?>
 
 <div class="card" style="margin-bottom: 0">
     <div class="card-body">
         <?php $form = ActiveForm::begin([
             'id' => 'type-model',
-            'options' => ['enctype' => 'multipart/form-data']
+            // 'options' => ['enctype' => 'multipart/form-data']
         ]) ?>
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
