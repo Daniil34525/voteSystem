@@ -26,7 +26,7 @@ class TypeController extends Controller
         VotingTypes::class => 'Типы голосований'
     ];
 
-    /** @var string Полное имя класса обрабатываемой модели. Вычисляется в init по значению гет-параметра $model */
+    /** @var string Полное имя классz обрабатываемой модели. Вычисляется в init по значению гет-параметра $model */
     private string $modelClass;
 
     /** @var string Короткое имя класса. См в init */
@@ -91,7 +91,7 @@ class TypeController extends Controller
 
         if (!is_null($model)) $model->delete();
 
-        return $this->redirect(['index', 'model' => $this->shortModelClass]);
+        return $this->redirect(['index', 'model' => $this->shortModelClass], 302);
     }
 
     public function actionIndex(): string

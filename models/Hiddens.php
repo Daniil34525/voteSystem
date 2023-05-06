@@ -46,6 +46,16 @@ class Hiddens extends ActiveRecord
         ];
     }
 
+    public static function get_random_code($length=8): string
+    {
+        $regex = '/[^a-zA-Z0-9]/';
+        $randomString = '';
+        while (strlen($randomString) < $length) {
+            $randomString .= preg_replace($regex, '', chr(random_int(1, 255)));
+        }
+        return $randomString;
+    }
+
     /**
      * Gets query for [[HiddensLists]].
      *
