@@ -57,9 +57,9 @@ class Users extends ActiveRecord
             'name' => 'Имя пользователя',
             'middle_name' => 'Фамилия пользователя',
             'last_name' => 'Отчество пользователя',
-            'email' => 'E-mail адрес',
+            'email' => 'E-mail',
             'phone' => 'Телефон',
-            'password_hash' => 'Хеш пароля',
+            'password_hash' => 'Пароль',
             'role_type_id' => 'Роль пользователя',
         ];
     }

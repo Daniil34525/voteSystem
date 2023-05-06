@@ -39,4 +39,16 @@ class RoleTypes extends Type
     {
         return $this->hasMany(Users::class, ['role_type_id' => 'id']);
     }
+
+    public static function get_list_items() {
+        $model_types = RoleTypes::find()->select(['id', 'title'])->asArray()->all();
+
+        $data = []; 
+        
+        foreach ($model_types as $model) {
+            $data[$model["id"]] = $model['title'];
+        }
+          
+        return $data;
+    }
 }

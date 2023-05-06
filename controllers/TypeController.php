@@ -86,6 +86,7 @@ class TypeController extends Controller
     public function actionDelete($id): Response
     {
         $modelObject = Yii::createObject($this->modelClass);
+        
         $model = $modelObject->findOne($id);
 
         if (!is_null($model)) $model->delete();
