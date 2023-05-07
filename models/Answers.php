@@ -8,15 +8,17 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "answers".
  *
- * @property int $id Идентификатор вопроса
- * @property string $title Наименование вопроса
- * @property string|null $voters Предполагается две колонки: Class::voter, id избирателя
+ * @property int $id Идентификатор ответа
+ * @property string $title Наименование ответа
  * @property int $question_id Идентификатор вопроса
+ * @property array|null $voters голосующие TODO: такой же пункт есть в questions, надо решить что мы оставим
  *
  * @property Questions $question
+// * @property Voters[] $votersModels Предполагается два массива(или вообще один), внутри каждого хранятся id
  */
 class Answers extends ActiveRecord
 {
+//    private $votersModels;
     /**
      * {@inheritdoc}
      */
@@ -32,11 +34,16 @@ class Answers extends ActiveRecord
     {
         return [
             [['title', 'question_id'], 'required'],
-            [['voters'], 'safe'],
             [['question_id'], 'default', 'value' => null],
             [['question_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questions::class, 'targetAttribute' => ['question_id' => 'id']],
+            ['voters', 'safe']
+//            [['voters'], function () {
+//                if (!Model::validateMultiple($this->votersModels)) {
+//                    $this->addErrors(ArrayHelper::getColumn($this->votersModels, 'errors'));
+//                }
+//            }],
         ];
     }
 
@@ -46,12 +53,56 @@ class Answers extends ActiveRecord
     public function attributeLabels(): array
     {
         return [
-            'id' => 'Идентификатор вопроса',
-            'title' => 'Наименование вопроса',
-            'voters' => 'Предполагается две колонки: Class::voter, id избирателя',
+            'id' => 'Идентификатор ответа',
+            'title' => 'Наименование ответа',
+            'voters' => 'Отвечающие',
             'question_id' => 'Идентификатор вопроса',
         ];
     }
+
+    public function extraFields(): array
+    {
+        return ['voters']; // Указываем поле JSON в списке дополнительных полей
+    }
+
+//    /*********************************************************************************************************
+//     *                              EVENTS
+//     */
+//    public function beforeValidate(): bool
+//    {
+//        $this->voters = Voters::getDataFromPost();
+//        return parent::beforeValidate();
+//    }
+//
+//    public function beforeSave($insert): bool
+//    {
+//        $this->voters = ArrayHelper::toArray($this->votersModels);
+//        return parent::beforeSave($insert);
+//    }
+
+//    /** @return Voters[] */
+//    public function getVotersModels($createBlank = false): array //Надо тестировать, возможно можно переписать оптимизированнее
+//    {
+////        if (!is_iterable($this->votersModels) || empty($this->additionalPhones)) {
+////            $blankModel = new Voters(['type' => 'Личный', 'number' => '+7'], $this);
+////            return $createBlank ? [$blankModel] : [];
+////        }
+////
+////        if (is_null($this->_additionalPhonesModels)) {
+////            foreach ($this->additionalPhones as $phone) {
+////                $this->_additionalPhonesModels[] = new AdditionalPhone($phone, $this);
+////            }
+////        }
+////
+////        return $this->_additionalPhonesModels;
+//        if (is_null($this->_votersModels)) {
+//            foreach ($this->voters as $voter) {
+//                $this->_votersModels[] = new Voters($voter, $this);
+//            }
+//        }
+//
+//        return $this->_votersModels;
+//    }
 
     /**
      * Gets query for [[Questions]].

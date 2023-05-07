@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property int|null $bulletin_id Идентификатор бюллетени
  * @property string|null $overview Дополнительное описание сути вопроса
  * @property int $type_id Идентификтор типа вопроса
- * @property string|null $answer Ответы
+ * @property string|null $answer Ответы TODO: такой же пункт есть в answers, надо решить что мы оставим
  *
  * @property Answers[] $answers
  * @property Bulletins $bulletin
