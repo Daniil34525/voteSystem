@@ -2,14 +2,19 @@
 
 namespace app\models;
 
+use yii\base\Behavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+
 
 /**
  * This is the model class for table "voters_list".
  *
  * @property int $id Идентификатор списка избирателей
  * @property int $created_at Время создания списка
+ * @property string $title Заголовок списка
  * @property int|null $updated_at Время обновления списка
  *
  * @property Hiddens[] $hiddens
@@ -20,6 +25,13 @@ use yii\db\ActiveRecord;
  */
 class VotersList extends ActiveRecord
 {
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
     /**
      * {@inheritdoc}
      */
@@ -34,10 +46,14 @@ class VotersList extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['created_at'], 'required'],
-            [['created_at', 'updated_at'], 'default', 'value' => null],
-            [['created_at', 'updated_at'], 'integer'],
-        ];
+            [['id'], 'integer'],
+            [['title'], 'safe'],
+        ]; 
+    //     return [
+    //         [['created_at'], 'required'],
+    //         [['created_at', 'updated_at'], 'default', 'value' => null],
+    //         [['created_at', 'updated_at'], 'integer'],
+    //     ];
     }
 
     /**
@@ -47,6 +63,7 @@ class VotersList extends ActiveRecord
     {
         return [
             'id' => 'Идентификатор списка избирателей',
+            'title' => 'Заголовок списка',
             'created_at' => 'Время создания списка',
             'updated_at' => 'Время обновления списка',
         ];
