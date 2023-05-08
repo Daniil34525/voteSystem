@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -15,9 +16,20 @@ use yii\db\ActiveRecord;
  * @property BulletinsList[] $bulletinsLists
  * @property Questions[] $questions
  * @property Votings[] $votings
+ * 
  */
 class Bulletins extends ActiveRecord
 {
+    public function behaviors(){
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at', 
+                'updatedAtAttribute' => false
+            ],
+            
+        ]; 
+    }
     /**
      * {@inheritdoc}
      */
@@ -32,10 +44,9 @@ class Bulletins extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['title', 'created_at'], 'required'],
-            [['created_at'], 'default', 'value' => null],
-            [['created_at'], 'integer'],
-            [['title'], 'string', 'max' => 255],
+            ['id', 'integer'], 
+            ['title', 'required'],
+            ['title', 'string', 'max' => 255],
         ];
     }
 
@@ -46,7 +57,7 @@ class Bulletins extends ActiveRecord
     {
         return [
             'id' => 'Код бюллетени',
-            'title' => 'Название',
+            'title' => 'Наименование',
             'created_at' => 'Дата создания',
         ];
     }
@@ -54,7 +65,7 @@ class Bulletins extends ActiveRecord
     public static function get_list_items()
     {
         # Gets all records from Bulletins with 'id' and 'title' as array:
-        $model_items = Bulletins::find()->select('id', 'title')->asArray()->all();
+        $model_items = Bulletins::find()->select(['id', 'title'])->asArray()->all();
 
         # Creates the data associative array with key -> id and value -> title:
         $data = [];

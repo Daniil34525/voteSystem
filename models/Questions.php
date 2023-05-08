@@ -13,9 +13,7 @@ use yii\db\ActiveRecord;
  * @property int|null $bulletin_id Идентификатор бюллетени
  * @property string|null $overview Дополнительное описание сути вопроса
  * @property int $type_id Идентификтор типа вопроса
- * @property string|null $answer Ответы TODO: такой же пункт есть в answers, надо решить что мы оставим
  *
- * @property Answers[] $answers
  * @property Bulletins $bulletin
  * @property QuestionTypes $type
  */
@@ -39,7 +37,6 @@ class Questions extends ActiveRecord
             [['bulletin_id', 'type_id'], 'default', 'value' => null],
             [['bulletin_id', 'type_id'], 'integer'],
             [['overview'], 'string'],
-            [['answer'], 'safe'],
             [['question_title'], 'string', 'max' => 255],
             [['bulletin_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bulletins::class, 'targetAttribute' => ['bulletin_id' => 'id']],
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => QuestionTypes::class, 'targetAttribute' => ['type_id' => 'id']],
@@ -57,7 +54,6 @@ class Questions extends ActiveRecord
             'bulletin_id' => 'Бюллетень',
             'overview' => 'Дополнительное описание вопроса',
             'type_id' => 'Тип вопроса',
-            'answer' => 'Ответы',
         ];
     }
 

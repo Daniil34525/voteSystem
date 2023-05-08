@@ -34,7 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'bulletin_id',
             'overview:ntext',
             'type_id',
-            'answer',
         ],
     ]) ?>
 

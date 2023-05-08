@@ -21,22 +21,12 @@ class QuestionSearch extends Questions
             [['bulletin_id', 'type_id'], 'default', 'value' => null],
             [['bulletin_id', 'type_id'], 'integer'],
             [['overview'], 'string'],
-            [['answer'], 'safe'],
             [['question_title'], 'string', 'max' => 255],
             [['bulletin_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bulletins::class, 'targetAttribute' => ['bulletin_id' => 'id']],
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => QuestionTypes::class, 'targetAttribute' => ['type_id' => 'id']],
         ];
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
 
     /**
      * Creates data provider instance with search query applied
@@ -71,8 +61,7 @@ class QuestionSearch extends Questions
         ]);
 
         $query->andFilterWhere(['ilike', 'question_title', $this->question_title])
-            ->andFilterWhere(['ilike', 'overview', $this->overview])
-            ->andFilterWhere(['ilike', 'answer', $this->answer]);
+            ->andFilterWhere(['ilike', 'overview', $this->overview]);
 
         return $dataProvider;
     }
