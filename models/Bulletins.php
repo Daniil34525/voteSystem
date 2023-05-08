@@ -51,6 +51,22 @@ class Bulletins extends ActiveRecord
         ];
     }
 
+    public static function get_list_items()
+    {
+        # Gets all records from Bulletins with 'id' and 'title' as array:
+        $model_items = Bulletins::find()->select('id', 'title')->asArray()->all();
+
+        # Creates the data associative array with key -> id and value -> title:
+        $data = [];
+
+        # Adds data to this data array with data from Bulletins model:
+        foreach ($model_items as $model) {
+            $data[$model["id"]] = $model['title'];
+        }
+
+        return $data;
+    }
+
     /**
      * Gets query for [[BulletinsLists]].
      *
