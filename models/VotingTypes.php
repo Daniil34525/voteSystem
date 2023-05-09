@@ -19,16 +19,19 @@ class VotingTypes extends Type
         return 'voting_types';
     }
 
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function attributeLabels(): array
-//    {
-//        return [
-//            'id' => 'id',
-//            'title' => 'Название',
-//        ];
-//    }
+    public static function get_list_items(): array
+    {
+        $model_items = VotingTypes::find()->select(['id', 'title'])->asArray()->all();
+
+        $data = [];
+
+        foreach ($model_items as $model) {
+            $data[$model["id"]] = $model['title'];
+        }
+
+        return $data;
+    }
+
     /**
      * Gets query for [[Votings]].
      *

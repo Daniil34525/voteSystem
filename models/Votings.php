@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -26,6 +27,18 @@ class Votings extends ActiveRecord
     public static function tableName(): string
     {
         return 'votings';
+    }
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+                'timeStamp' => [
+                    'class' => TimestampBehavior::class,
+                    'createdAtAttribute' => 'created_at',
+                    'updatedAtAttribute' => null,
+                ],
+            ]
+        );
     }
 
     /**
