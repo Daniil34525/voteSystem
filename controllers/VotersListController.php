@@ -17,7 +17,7 @@ class VotersListController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -37,7 +37,7 @@ class VotersListController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new VotersListSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -55,18 +55,18 @@ class VotersListController extends Controller
      */
     public function actionCreate()
     {
-        // New model creeation:
+        // New model creation:
         $model = new VotersList();
         
         // Checking the request type:
         if ($this->request->isPost) {
-            # Loading data from form where data from post to model and make a save opperation:
+            # Loading data from form where data from post to model and make a save operation:
             if ($model->load($this->request->post()) && $model->save()) {
-                # Creata the redirect to the index page with the satuscode 302:
+                # Create the redirect to the index page with the status code 302:
                 return $this->redirect('index', 302);
             }
         } else {
-            # Create model with the default data from database shcema: 
+            # Create model with the default data from database schema:
             $model->loadDefaultValues();
         }
 
