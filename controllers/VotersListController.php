@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Users;
 use app\models\VotersList;
 use app\models\VotersListSearch;
 use yii\db\ActiveRecord;
@@ -57,13 +58,18 @@ class VotersListController extends Controller
     {
         // New model creation:
         $model = new VotersList();
-        
-        // Checking the request type:
+
         if ($this->request->isPost) {
-            # Loading data from form where data from post to model and make a save operation:
-            if ($model->load($this->request->post()) && $model->save()) {
-                # Create the redirect to the index page with the status code 302:
-                return $this->redirect('index', 302);
+            if ($model->load($this->request->post())) {
+                $post = $this->request->post()['userIds'];
+                if ($model->save()) {
+                    foreach ($post as $item => $key) {
+                        $user = Users::find($item)->one();
+                        $model->link('users', $user);
+                    }
+                    $model->save();
+                    return $this->redirect('index', 302);
+                }
             }
         } else {
             # Create model with the default data from database schema:
@@ -86,12 +92,34 @@ class VotersListController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect('index', 302);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $post = $this->request->post()['userIds'];
+            if ($model->save()) {
+                // Получаем текущие значения связей модели $model
+                $existingUsers = $model->getUsers()->select('id')->column();
+                // Перебираем текущие значения и удаляем те, которых нет в $post
+                foreach ($existingUsers as $userId) {
+                    if (!isset($post[$userId])) {
+                        $user = Users::findOne($userId);
+                        $model->unlink('users', $user, true);
+                    }
+                }
+                // Создаем новые связи на основе значений в $post
+                if (isset($post))
+                    foreach ($post as $userId => $value) {
+                        $user = Users::findOne($userId);
+                        if (!in_array($user->id, $existingUsers))
+                            $model->link('users', $user);
+                    }
+                $model->save();
+                return $this->redirect('index', 302);
+            }
         }
+        $userIds = $model->getUsers()->select('id')->column(); // Получить все ID пользователей
 
         return $this->render('update', [
             'model' => $model,
+            'userIds' => $userIds
         ]);
     }
 
@@ -109,6 +137,8 @@ class VotersListController extends Controller
         return $this->redirect(['index']);
     }
 
+//    public function action
+
     /**
      * Finds the VotersList model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -116,7 +146,7 @@ class VotersListController extends Controller
      * @return VotersList the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) : ActiveRecord
+    protected function findModel($id): ActiveRecord
     {
         if (($model = VotersList::findOne(['id' => $id])) !== null) {
             return $model;
