@@ -48,19 +48,6 @@ class BulletinsController extends Controller
         ]);
     }
 
-    // /**
-    //  * Displays a single Bulletins model.
-    //  * @param int $id Код бюллетени
-    //  * @return string
-    //  * @throws NotFoundHttpException if the model cannot be found
-    //  */
-    // public function actionView($id)
-    // {
-    //     return $this->render('view', [
-    //         'model' => $this->findModel($id),
-    //     ]);
-    // }
-
     /**
      * Creates a new Bulletins model.
      * If creation is successful, the browser will be redirected to the 'view' page.

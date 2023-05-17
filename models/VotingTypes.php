@@ -19,16 +19,6 @@ class VotingTypes extends Type
         return 'voting_types';
     }
 
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function attributeLabels(): array
-//    {
-//        return [
-//            'id' => 'id',
-//            'title' => 'Название',
-//        ];
-//    }
     /**
      * Gets query for [[Votings]].
      *

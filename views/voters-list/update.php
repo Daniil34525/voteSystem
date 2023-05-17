@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\VotersList $model */
+/** @var integer[] $userIds */
 
 $this->title = 'Update Voters List: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Voters Lists', 'url' => ['index']];
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'userIds' => $userIds
     ]) ?>
 
 </div>

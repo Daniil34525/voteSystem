@@ -64,6 +64,11 @@ class Users extends ActiveRecord
         ];
     }
 
+    public function getMiddleNameAndInitials(): string
+    {
+        return $this->middle_name . ' ' . $this->name . ' ' . $this->last_name;
+    }
+
     /**
      * Gets query for [[RoleType]].
      *

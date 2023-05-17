@@ -4,9 +4,11 @@ namespace app\controllers;
 
 use app\models\Hiddens;
 use app\models\HiddenSearch;
+use app\models\VotersList;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * HiddensController implements the CRUD actions for Hiddens model.
@@ -48,24 +50,11 @@ class HiddensController extends Controller
     }
 
     /**
-     * Displays a single Hiddens model.
-     * @param int $id Идентифактор анонимного участника
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    // public function actionView($id)
-    // {
-    //     return $this->render('view', [
-    //         'model' => $this->findModel($id),
-    //     ]);
-    // }
-
-    /**
      * Creates a new Hiddens model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($count=1)
+    public function actionCreate($count = 1)
     {
         for ($i = 0; $i < $count; $i++) {
             $model = new Hiddens();
@@ -75,26 +64,6 @@ class HiddensController extends Controller
 
         return $this->redirect('index', 301);
     }
-
-    /**
-     * Updates an existing Hiddens model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id Идентифактор анонимного участника
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    // public function actionUpdate($id)
-    // {
-    //     $model = $this->findModel($id);
-
-    //     if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-    //         return $this->redirect(['view', 'id' => $model->id]);
-    //     }
-
-    //     return $this->render('update', [
-    //         'model' => $model,
-    //     ]);
-    // }
 
     /**
      * Deletes an existing Hiddens model.
@@ -108,6 +77,24 @@ class HiddensController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionChoiceHiddens($votersListId): Response
+    {
+        $data = [];
+        $hiddens = Hiddens::find()->orderBy(['id' => SORT_DESC])->all();
+        $model = VotersList::find()->where(['id' => $votersListId])->one();
+        $hiddensIds = $model->getHiddens()->select('id')->column(); // Получить все ID анонимных пользователь
+        foreach ($hiddens as $hidden) {
+            $arrItem = [
+                'id' => $hidden->id,
+                'name' => 'hiddenIds',
+                'title' => $hidden->code,
+                'isChecked' => in_array($hidden->id, $hiddensIds) ? 'checked' : ''
+            ];
+            $data[] = $arrItem;
+        }
+        return $this->asJson(['result' => 'ok', 'data' => $data]);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Hiddens;
+use app\models\Users;
 use app\models\VotersList;
 use app\models\VotersListSearch;
 use yii\db\ActiveRecord;
@@ -57,13 +59,26 @@ class VotersListController extends Controller
     {
         // New model creation:
         $model = new VotersList();
-        
-        // Checking the request type:
+
         if ($this->request->isPost) {
-            # Loading data from form where data from post to model and make a save operation:
-            if ($model->load($this->request->post()) && $model->save()) {
-                # Create the redirect to the index page with the status code 302:
-                return $this->redirect('index', 302);
+            if ($model->load($this->request->post())) {
+
+                if ($this->request->post()['userIds']) $type = 'user';
+                elseif ($this->request->post()['hiddenIds']) $type = 'hidden';
+
+                if (isset($type)) {
+                    $post = $this->request->post()[$type . 'Ids'];
+                    if ($model->save()) {
+
+                        foreach ($post as $item => $key) {
+                            $user = $type == 'user' ? Users::findOne($item) : ($type == 'hidden' ? Hiddens::findOne($item) : null);
+                            $model->link($type . 's', $user);
+                        }
+
+                        $model->save();
+                        return $this->redirect('index', 302);
+                    }
+                }
             }
         } else {
             # Create model with the default data from database schema:
@@ -86,12 +101,44 @@ class VotersListController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect('index', 302);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($this->request->post()['userIds']) $type = 'user';
+            elseif ($this->request->post()['hiddenIds']) $type = 'hidden';
+
+            if (isset($type)) {
+                $post = $this->request->post()[$type . 'Ids'];
+
+                if ($model->save()) {
+                    $getUsers = 'get' . $type . 's';
+                    // Получаем текущие значения связей модели $model
+                    $existingUsers = $model->$getUsers()->select('id')->column();
+
+                    // Перебираем текущие значения и удаляем те, которых нет в $post
+                    foreach ($existingUsers as $userId) {
+                        if (!isset($post[$userId])) {
+                            $user = $type == 'user' ? Users::findOne($userId) : ($type == 'hidden' ? Hiddens::findOne($userId) : null);
+                            $model->unlink($type . 's', $user, true);
+                        }
+                    }
+
+                    $unlinkName = $type == 'user' ? 'hiddens' : ($type == 'hidden' ? 'users' : null);
+                    $model->unlinkAll($unlinkName, true);
+
+                    // Создаем новые связи на основе значений в $post
+                    if (isset($post))
+                        foreach ($post as $userId => $value) {
+                            $user = $type == 'user' ? Users::findOne($userId) : ($type == 'hidden' ? Hiddens::findOne($userId) : null);
+                            if (!in_array($user->id, $existingUsers))
+                                $model->link($type . 's', $user);
+                        }
+                    $model->save();
+                    return $this->redirect('index', 302);
+                }
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 
@@ -116,7 +163,7 @@ class VotersListController extends Controller
      * @return VotersList the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) : ActiveRecord
+    protected function findModel($id): ActiveRecord
     {
         if (($model = VotersList::findOne(['id' => $id])) !== null) {
             return $model;
