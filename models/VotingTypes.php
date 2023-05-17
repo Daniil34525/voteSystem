@@ -19,6 +19,19 @@ class VotingTypes extends Type
         return 'voting_types';
     }
 
+    public static function get_list_items(): array
+    {
+        $model_items = VotingTypes::find()->select(['id', 'title'])->asArray()->all();
+
+        $data = [];
+
+        foreach ($model_items as $model) {
+            $data[$model["id"]] = $model['title'];
+        }
+
+        return $data;
+    }
+
     /**
      * Gets query for [[Votings]].
      *

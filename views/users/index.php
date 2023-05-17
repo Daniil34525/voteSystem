@@ -43,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function(Users $model) {
                     return $model->roleType->title;
                 }
-
             ],
             [
                 'class' => ActionColumn::class,

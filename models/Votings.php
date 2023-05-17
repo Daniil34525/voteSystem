@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -14,6 +15,7 @@ use yii\db\ActiveRecord;
  * @property int $voting_type_id Идентификатор типа голосования
  * @property int $created_at Дата создания голосования
  *
+ * @property VotingTypes $type
  * @property Bulletins[] $bulletins
  * @property BulletinsList[] $bulletinsLists
  * @property VotersList $votersList
@@ -26,6 +28,18 @@ class Votings extends ActiveRecord
     public static function tableName(): string
     {
         return 'votings';
+    }
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+                'timeStamp' => [
+                    'class' => TimestampBehavior::class,
+                    'createdAtAttribute' => 'created_at',
+                    'updatedAtAttribute' => null,
+                ],
+            ]
+        );
     }
 
     /**
@@ -51,9 +65,19 @@ class Votings extends ActiveRecord
             'id' => 'id',
             'title' => 'Наименование голосования',
             'voters_list_id' => 'Идентификатор список избирателей',
-            'voting_type_id' => 'Идентификатор типа голосования',
+            'voting_type_id' => 'Тип',
             'created_at' => 'Дата создания голосования',
         ];
+    }
+
+    /**
+     * Gets query for [[VotingType]].
+     *
+     * @return ActiveQuery
+     */
+    public function getType(): ActiveQuery
+    {
+        return $this->hasOne(VotingTypes::class, ['id' => 'voting_type_id']);
     }
 
     /**
