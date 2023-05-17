@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Hiddens;
 use app\models\Users;
 use app\models\VotersList;
 use app\models\VotersListSearch;
@@ -61,14 +62,22 @@ class VotersListController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $post = $this->request->post()['userIds'];
-                if ($model->save()) {
-                    foreach ($post as $item => $key) {
-                        $user = Users::find($item)->one();
-                        $model->link('users', $user);
+
+                if ($this->request->post()['userIds']) $type = 'user';
+                elseif ($this->request->post()['hiddenIds']) $type = 'hidden';
+
+                if (isset($type)) {
+                    $post = $this->request->post()[$type . 'Ids'];
+                    if ($model->save()) {
+
+                        foreach ($post as $item => $key) {
+                            $user = $type == 'user' ? Users::findOne($item) : ($type == 'hidden' ? Hiddens::findOne($item) : null);
+                            $model->link($type . 's', $user);
+                        }
+
+                        $model->save();
+                        return $this->redirect('index', 302);
                     }
-                    $model->save();
-                    return $this->redirect('index', 302);
                 }
             }
         } else {
@@ -93,33 +102,43 @@ class VotersListController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            $post = $this->request->post()['userIds'];
-            if ($model->save()) {
-                // Получаем текущие значения связей модели $model
-                $existingUsers = $model->getUsers()->select('id')->column();
-                // Перебираем текущие значения и удаляем те, которых нет в $post
-                foreach ($existingUsers as $userId) {
-                    if (!isset($post[$userId])) {
-                        $user = Users::findOne($userId);
-                        $model->unlink('users', $user, true);
+            if ($this->request->post()['userIds']) $type = 'user';
+            elseif ($this->request->post()['hiddenIds']) $type = 'hidden';
+
+            if (isset($type)) {
+                $post = $this->request->post()[$type . 'Ids'];
+
+                if ($model->save()) {
+                    $getUsers = 'get' . $type . 's';
+                    // Получаем текущие значения связей модели $model
+                    $existingUsers = $model->$getUsers()->select('id')->column();
+
+                    // Перебираем текущие значения и удаляем те, которых нет в $post
+                    foreach ($existingUsers as $userId) {
+                        if (!isset($post[$userId])) {
+                            $user = $type == 'user' ? Users::findOne($userId) : ($type == 'hidden' ? Hiddens::findOne($userId) : null);
+                            $model->unlink($type . 's', $user, true);
+                        }
                     }
+
+                    $unlinkName = $type == 'user' ? 'hiddens' : ($type == 'hidden' ? 'users' : null);
+                    $model->unlinkAll($unlinkName, true);
+
+                    // Создаем новые связи на основе значений в $post
+                    if (isset($post))
+                        foreach ($post as $userId => $value) {
+                            $user = $type == 'user' ? Users::findOne($userId) : ($type == 'hidden' ? Hiddens::findOne($userId) : null);
+                            if (!in_array($user->id, $existingUsers))
+                                $model->link($type . 's', $user);
+                        }
+                    $model->save();
+                    return $this->redirect('index', 302);
                 }
-                // Создаем новые связи на основе значений в $post
-                if (isset($post))
-                    foreach ($post as $userId => $value) {
-                        $user = Users::findOne($userId);
-                        if (!in_array($user->id, $existingUsers))
-                            $model->link('users', $user);
-                    }
-                $model->save();
-                return $this->redirect('index', 302);
             }
         }
-        $userIds = $model->getUsers()->select('id')->column(); // Получить все ID пользователей
 
         return $this->render('update', [
-            'model' => $model,
-            'userIds' => $userIds
+            'model' => $model
         ]);
     }
 
@@ -136,8 +155,6 @@ class VotersListController extends Controller
 
         return $this->redirect(['index']);
     }
-
-//    public function action
 
     /**
      * Finds the VotersList model based on its primary key value.

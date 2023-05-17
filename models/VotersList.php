@@ -32,6 +32,7 @@ class VotersList extends ActiveRecord
             TimestampBehavior::class,
         ];
     }
+
     /**
      * {@inheritdoc}
      */
@@ -48,12 +49,12 @@ class VotersList extends ActiveRecord
         return [
             [['id'], 'integer'],
             [['title'], 'safe'],
-        ]; 
-    //     return [
-    //         [['created_at'], 'required'],
-    //         [['created_at', 'updated_at'], 'default', 'value' => null],
-    //         [['created_at', 'updated_at'], 'integer'],
-    //     ];
+        ];
+        //     return [
+        //         [['created_at'], 'required'],
+        //         [['created_at', 'updated_at'], 'default', 'value' => null],
+        //         [['created_at', 'updated_at'], 'integer'],
+        //     ];
     }
 
     /**
@@ -67,6 +68,15 @@ class VotersList extends ActiveRecord
             'created_at' => 'Время создания списка',
             'updated_at' => 'Время обновления списка',
         ];
+    }
+
+    public function getStatus(): ?string
+    {
+        if ($this->getHiddens()->exists())
+            return 'hiddens';
+        if ($this->getUsers()->exists())
+            return 'users';
+        return null;
     }
 
     /**
