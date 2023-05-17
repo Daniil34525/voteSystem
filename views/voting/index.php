@@ -5,10 +5,12 @@
  * @var $title string
  */
 
+use app\models\Votings;
 use app\models\VotingSearch;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = $title;
@@ -34,8 +36,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         'id',
                         'title',
                         [
+                            'attribute' => 'voting_type_id',
+                            'value' => function(Votings $model) {
+                                return $model->type->title;
+                            }
+                        ],
+                        [
                             'class' => ActionColumn::class,
-                            'template' => '{updated} {delete}',
+                            'template' => '{update} {delete}',
+                            'buttons' => [
+                                'update' => function ($url, $model, $key) {
+                                    return Html::a('Обновить', Url::to(['update-create', 'id' => $key]));
+                                }
+                            ]
                         ],
                     ]
                 ]); ?>
