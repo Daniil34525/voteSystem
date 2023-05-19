@@ -17,24 +17,6 @@ use yii\filters\VerbFilter;
 class VotersListController extends Controller
 {
     /**
-     * @inheritDoc
-     */
-    public function behaviors(): array
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
-
-    /**
      * Lists all VotersList models.
      *
      * @return string
@@ -63,6 +45,13 @@ class VotersListController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
 
+                if ($model->title == '') return $this->redirect('delete?id=' . $model->id, 301);
+                else {
+                    $modelOld = VotersList::find()->where(['id'=>$model->id])->one();
+                    $modelOld->title = $model->title;
+                    $model = $modelOld;
+                }
+
                 if ($this->request->post()['userIds']) $type = 'user';
                 elseif ($this->request->post()['hiddenIds']) $type = 'hidden';
 
@@ -83,6 +72,8 @@ class VotersListController extends Controller
         } else {
             # Create model with the default data from database schema:
             $model->loadDefaultValues();
+            $model->title = '';
+            $model->save();
         }
 
         return $this->render('create', [
