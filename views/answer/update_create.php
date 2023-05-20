@@ -1,12 +1,8 @@
 <?php
-/** @var View $this
- * @var Answers $model
- * @var integer $questionId
- */
+/** @var Answers $model */
 
 use app\models\Answers;
 use yii\helpers\Html;
-use yii\web\View;
 use yii\widgets\ActiveForm;
 ?>
 
@@ -17,7 +13,6 @@ use yii\widgets\ActiveForm;
         ]) ?>
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-        <?= Html::activeHiddenInput($model, 'id') ?>
         <?= Html::activeHiddenInput($model, 'question_id') ?>
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

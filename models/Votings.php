@@ -48,7 +48,7 @@ class Votings extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['title', 'voting_type_id', 'created_at'], 'required'],
+            [['title', 'voting_type_id'], 'required'],
             [['voters_list_id', 'voting_type_id', 'created_at'], 'default', 'value' => null],
             [['voters_list_id', 'voting_type_id', 'created_at'], 'integer'],
             [['title'], 'string', 'max' => 255],

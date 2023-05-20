@@ -1,9 +1,13 @@
 <?php
 
+use app\models\Answers;
 use yii\helpers\Html;
 
-/** @var yii\web\View $this */
-/** @var app\models\Questions $model */
+/**
+ * @var yii\web\View $this
+ * @var app\models\Questions $model
+ * @var Answers[] $answers
+ */
 
 $this->title = 'Update Questions: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['index']];
@@ -16,6 +20,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'answers' => $answers
     ]) ?>
 
 </div>
