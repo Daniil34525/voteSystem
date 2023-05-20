@@ -79,6 +79,17 @@ class HiddensController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionCreateHiddensForVotersList($count, $votersListId){
+        $voterModel = VotersList::find()->where(['id' => $votersListId])->one();
+        for ($i = 0; $i < $count; $i++) {
+            $model = new Hiddens();
+            $model->code = Hiddens::get_random_code();
+            $model->save();
+            $model->link('voterLists', $voterModel);
+        }
+        return $this->asJson(['result' => 'ok']);
+    }
+
     public function actionChoiceHiddens($votersListId): Response
     {
         $data = [];
@@ -94,7 +105,8 @@ class HiddensController extends Controller
             ];
             $data[] = $arrItem;
         }
-        return $this->asJson(['result' => 'ok', 'data' => $data]);
+        $hiddensPresence = !empty($hiddensIds);
+        return $this->asJson(['result' => 'ok', 'type' => 'hiddens',  'hiddensPresence' => $hiddensPresence, 'data' => $data]);
     }
 
     /**

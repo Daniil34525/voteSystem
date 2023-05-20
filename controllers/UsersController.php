@@ -135,7 +135,7 @@ class UsersController extends Controller
             ];
             $data[] = $arrItem;
         }
-        return $this->asJson(['result' => 'ok', 'data' => $data]);
+        return $this->asJson(['result' => 'ok', 'type' => 'users', 'data' => $data]);
     }
 
     /**
