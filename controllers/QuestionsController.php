@@ -75,13 +75,32 @@ class QuestionsController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $answersIds = $this->request->post()['answerIds'];
+                $answerModels = Answers::find()->where(['question_id' => $model->id])->all();
+                foreach ($answerModels as $answer) {
+                    if (!array_key_exists($answer->id, $answersIds)) {
+                        $answer->question_id = null;
+                        $answer->save();
+                    }
+                    unset($answersIds[$answer->id]);
+                }
+                foreach ($answersIds as $key => $status) {
+                    if ($status == 1) {
+                        $answer = Answers::find()->where(['id' => $key])->one();
+                        $answer->question_id = $model->id;
+                        $answer->save();
+                    }
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
         }
 
-        $answers = Answers::find()->where(['or', ['questionId' => null], ['questionId' => $model->id]])->select(['id', 'title'])->all();
+        if (is_null($model->id))
+            $answers = Answers::find()->where(['or', ['question_id' => null], ['question_id' => $model->id]])->select(['id', 'title', 'question_id'])->all();
+        else
+            $answers = Answers::find()->where(['question_id' => null])->select(['id', 'title', 'question_id'])->all();
         return $this->render('create', [
             'model' => $model,
             'answers' => $answers
