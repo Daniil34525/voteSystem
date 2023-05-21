@@ -50,20 +50,30 @@ use app\models\Bulletins;
     <?php ActiveForm::end(); ?>
 </div>
 <?php
+// Формирование модельного окна, которое на данный момент скрыто от пользователя: 
 Modal::begin([
-    'title' => '<h4 class="modal-title">Создать вопрос</h4>',
-    'id' => 'createAnswerModal',
+    // Присвоение атрубутов модальному окну:
+    'title' => '<h4 class="modal-title">Создать ответ</h4>',    // Заголовок
+    'id' => 'createAnswerModal',                                // Присовоение id на странице данному окну.
 ]);
+
+// Вывод в document странице div контейнера под данное модальное окно.
 echo '<div id="modalContent"></div>';
 Modal::end();
 ?>
 
 <?php
+
 $url = Url::to('modal-content');
 // Регистрация JavaScript для открытия модального окна
 $js = <<< JS
+// При нажатии на кнопку с id "createAnswer": 
 $('#createAnswer').click(function(){
+    // Тело метода-обработчика:
+    // Инициализация переменной modelId значением из атрибута, который сохранен в кнопке и содержит id текущей модели:
     var modelId = $(this).data('model-id');
+
+    // Данный мето 
     $('#createAnswerModal').modal('show')
         .find('#modalContent')
         .load('$url', {'questionId': modelId});

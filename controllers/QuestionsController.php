@@ -161,6 +161,7 @@ class QuestionsController extends Controller
 
     public function actionModalContent()
     {
+        // Получение id вопроса из метода post:
         $questionId = $this->request->post()['questionId'];
         $answer = new Answers();
         if ($this->request->isPost && $answer->load($this->request->post()) && $answer->save()) {
