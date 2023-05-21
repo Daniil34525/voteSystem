@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Answers;
 use app\models\Questions;
 use app\models\QuestionSearch;
 use yii\db\ActiveRecord;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -78,8 +81,10 @@ class QuestionsController extends Controller
             $model->loadDefaultValues();
         }
 
+        $answers = Answers::find()->where(['or', ['questionId' => null], ['questionId' => $model->id]])->select(['id', 'title'])->all();
         return $this->render('create', [
             'model' => $model,
+            'answers' => $answers
         ]);
     }
 
@@ -95,11 +100,29 @@ class QuestionsController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            $answersIds = $this->request->post()['answerIds'];
+            $answerModels = Answers::find()->where(['question_id' => $model->id])->all();
+            foreach ($answerModels as $answer) {
+                if (!array_key_exists($answer->id, $answersIds)) {
+                    $answer->question_id = null;
+                    $answer->save();
+                }
+                unset($answersIds[$answer->id]);
+            }
+            foreach ($answersIds as $key => $status) {
+                if ($status == 1) {
+                    $answer = Answers::find()->where(['id' => $key])->one();
+                    $answer->question_id = $model->id;
+                    $answer->save();
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $answers = Answers::find()->where(['or', ['question_id' => null], ['question_id' => $model->id]])->select(['id', 'title', 'question_id'])->all();
         return $this->render('update', [
             'model' => $model,
+            'answers' => $answers
         ]);
     }
 
@@ -117,6 +140,23 @@ class QuestionsController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionModalContent()
+    {
+        $questionId = $this->request->post()['questionId'];
+        $answer = new Answers();
+        if ($this->request->isPost && $answer->load($this->request->post()) && $answer->save()) {
+            $url = Url::to(['answer/view', 'id' => $answer->id]);
+            $text = Html::a($answer->title, $url);
+            $checkbox = Html::checkbox('answerIds[' . $answer->id . ']', true, ['class' => 'checkbox']);
+            $divTitle = Html::tag('div', $text, ['style' => 'margin-left: 20px']);
+            $html = Html::tag('div', $checkbox . $divTitle, ['style' => 'display: flex']);
+            return $this->asJson(['result' => 'ok', 'html' => $html]);
+        }
+        if (!is_null($questionId))
+            $answer->question_id = $questionId;
+        return $this->renderAjax('modal-content', ['model' => $answer]);
+    }
+
     /**
      * Finds the Questions model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -124,7 +164,7 @@ class QuestionsController extends Controller
      * @return Questions the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id):ActiveRecord
+    protected function findModel($id): ActiveRecord
     {
         if (($model = Questions::findOne(['id' => $id])) !== null) {
             return $model;
