@@ -49,8 +49,8 @@ class Votings extends ActiveRecord
     {
         return [
             [['title', 'voting_type_id'], 'required'],
-            [['voters_list_id', 'voting_type_id', 'created_at'], 'default', 'value' => null],
-            [['voters_list_id', 'voting_type_id', 'created_at'], 'integer'],
+            [['voters_list_id', 'voting_type_id'], 'default', 'value' => null],
+            [['voters_list_id', 'voting_type_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['voters_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => VotersList::class, 'targetAttribute' => ['voters_list_id' => 'id']],
         ];

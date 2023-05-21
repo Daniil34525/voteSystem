@@ -9,9 +9,9 @@ class VotingSearch extends Votings
     public function rules(): array
     {
         return [
-            [['title', 'voting_type_id', 'created_at'], 'required'],
-            [['voters_list_id', 'voting_type_id', 'created_at'], 'default', 'value' => null],
-            [['voters_list_id', 'voting_type_id', 'created_at'], 'integer'],
+            [['title', 'voting_type_id'], 'required'],
+            [['voters_list_id', 'voting_type_id'], 'default', 'value' => null],
+            [['voters_list_id', 'voting_type_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['voters_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => VotersList::class, 'targetAttribute' => ['voters_list_id' => 'id']],
         ];

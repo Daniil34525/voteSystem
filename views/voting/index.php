@@ -14,7 +14,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = $title;
-
+print_r($bulletins);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

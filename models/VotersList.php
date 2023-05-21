@@ -76,7 +76,13 @@ class VotersList extends ActiveRecord
             return 'hiddens';
         if ($this->getUsers()->exists())
             return 'users';
-        return null;
+        return 'default';
+    }
+
+    public function getStatusUpdated(): bool
+    {
+        if($this->created_at != $this->updated_at) return true;
+        return false;
     }
 
     /**
