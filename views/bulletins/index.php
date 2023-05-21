@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:date',
             [
                 'class' => ActionColumn::class,
-                'template' => '{update} {delete}',
+                'template' => '{update} {delete} {view}',
             ],
         ],
     ]); ?>
