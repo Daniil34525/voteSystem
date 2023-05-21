@@ -1,9 +1,12 @@
 <?php
+
 /** @var yii\web\View $this
  * @var Votings $model
  */
 
 use app\models\Votings;
+use app\models\BulletinsList;
+use app\models\Bulletins;
 use app\models\VotingTypes;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -22,6 +25,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'voting_type_id')->dropDownList(VotingTypes::get_list_items()); ?>
+
+         <?php
+
+        // Получение списка всех бюллетений:
+        $bulletins = Bulletins::get_list_items();
+
+        // Получения списка бюллетений из bulletins_list для текущего голосования (если они уже были выбраны; в случае обновления)
+        $checked_bulletins = BulletinsList::find()->select(['bulletin_id'])->where(['voting_id' => $model->id ])->column();
+        
+        for($i = 1; $i <= count($bulletins); $i++) {
+            if (in_array($i, $checked_bulletins)){
+                echo "<input type='checkbox' id='$i' name='bulletins[$i]' value='$i' checked>";
+            }else {
+                echo "<input type='checkbox' id='$i' name='bulletins[$i]' value='$i'>";
+            }
+            echo "<lable for='$i'> $bulletins[$i] </lable><br/>";
+        }
+        ?> 
+
         <?= Html::activeHiddenInput($model, 'id') ?>
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
