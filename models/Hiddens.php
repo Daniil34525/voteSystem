@@ -2,8 +2,8 @@
 
 namespace app\models;
 
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "hiddens".
@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  * @property HiddensList[] $hiddensLists
  * @property VotersList[] $voterLists
  */
-class Hiddens extends ActiveRecord
+class Hiddens extends Users
 {
     /**
      * {@inheritdoc}
@@ -46,7 +46,7 @@ class Hiddens extends ActiveRecord
         ];
     }
 
-    public static function get_random_code($length=8): string
+    public static function get_random_code($length = 8): string
     {
         $regex = '/[^a-zA-Z0-9]/';
         $randomString = '';
@@ -54,6 +54,16 @@ class Hiddens extends ActiveRecord
             $randomString .= preg_replace($regex, '', chr(random_int(1, 255)));
         }
         return $randomString;
+    }
+
+    public static function findByCode($code): ?Hiddens
+    {
+        return static::findOne(['code' => $code]);
+    }
+
+    public function getRole(): string
+    {
+        return 'hidden';
     }
 
     /**
@@ -68,8 +78,8 @@ class Hiddens extends ActiveRecord
 
     /**
      * Gets query for [[VoterLists]].
-     *
      * @return ActiveQuery
+     * @throws InvalidConfigException
      */
     public function getVoterLists(): ActiveQuery
     {

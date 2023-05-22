@@ -1,7 +1,8 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var string $content */
+/** @var yii\web\View $this
+ * @var string $content
+ */
 
 use app\assets\AppAsset;
 use app\widgets\Alert;
@@ -39,22 +40,60 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Голосование', 'url' => ['/voting/index']],
-            ['label' => 'Пользователи', 'url' => ['/users/index']],
-            ['label' => 'Ответы', 'url' => ['/answer/index']],
-            ['label' => 'Бюллетени', 'url' => ['/bulletins/index']],
-            ['label' => 'Анонимы', 'url' => ['/hiddens/index']],
-            ['label' => 'Вопросы', 'url' => ['/questions/index']],
-            ['label' => 'Список голосующих', 'url' => ['/voters-list/index']],
+            [
+                'label' => 'Голосование',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/voting/index']],
+            [
+                'label' => 'Пользователи',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/users/index']
+            ],
+            [
+                'label' => 'Ответы',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/answer/index']
+            ],
+            [
+                'label' => 'Бюллетени',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/bulletins/index']
+            ],
+            [
+                'label' => 'Анонимы',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/hiddens/index']
+            ],
+            [
+                'label' => 'Вопросы',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/questions/index']
+            ],
+            [
+                'label' => 'Список голосующих',
+                'visible' => Yii::$app->user->can('createAll'),
+                'url' => ['/voters-list/index']
+            ],
             [
                 'label' => 'Типы',
                 'url' => '#',
+                'visible' => Yii::$app->user->can('createAll'),
                 'items' => [
                     ['label' => 'Тип вопроса', 'url' => ['/type/index?model=QuestionTypes']],
                     ['label' => 'Тип голосования', 'url' => ['/type/index?model=VotingTypes']],
                     ['label' => 'Роль', 'url' => ['/type/index?model=RoleTypes']],
                 ]
-            ]
+            ],
+            [
+                'label' => 'Войти',
+                'visible' => Yii::$app->user->isGuest,
+                'url' => ['/site/login']
+            ],
+            [
+                'label' => 'Выйти',
+                'visible' => !Yii::$app->user->isGuest,
+                'url' => ['/site/logout']
+            ],
         ]
     ]);
     NavBar::end();

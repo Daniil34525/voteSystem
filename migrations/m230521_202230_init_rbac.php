@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m230521_112230_init_rbac
+ * Class m230521_202230_init_rbac
  */
-class m230521_112230_init_rbac extends Migration
+class m230521_202230_init_rbac extends Migration
 {
     /**
      * {@inheritdoc}
@@ -41,6 +41,8 @@ class m230521_112230_init_rbac extends Migration
         $auth->addChild($adminRole, $createAllPermission);
         $auth->addChild($adminRole, $updateAllPermission);
         $auth->addChild($userRole, $votePermission);
+        $auth->addChild($userRole, $viewYourAnswerPermission);
+        $auth->addChild($hiddenRole, $votePermission);
         $auth->addChild($hiddenRole, $viewYourAnswerPermission);
     }
 

@@ -7,15 +7,35 @@ use app\models\Users;
 use app\models\VotersList;
 use app\models\VotersListSearch;
 use yii\db\ActiveRecord;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * VotersListController implements the CRUD actions for VotersList model.
  */
 class VotersListController extends Controller
 {
+    public function behaviors(): array
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'create', 'update', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных пользователей
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+
     /**
      * Lists all VotersList models.
      *
@@ -35,7 +55,7 @@ class VotersListController extends Controller
     /**
      * Creates a new VotersList model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -47,7 +67,7 @@ class VotersListController extends Controller
 
                 if ($model->title == '') return $this->redirect('delete?id=' . $model->id, 301);
                 else {
-                    $modelOld = VotersList::find()->where(['id'=>$model->id])->one();
+                    $modelOld = VotersList::find()->where(['id' => $model->id])->one();
                     $modelOld->title = $model->title;
                     $model = $modelOld;
                 }
@@ -85,10 +105,10 @@ class VotersListController extends Controller
      * Updates an existing VotersList model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id Идентификатор списка избирателей
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -137,10 +157,10 @@ class VotersListController extends Controller
      * Deletes an existing VotersList model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id Идентификатор списка избирателей
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -154,7 +174,7 @@ class VotersListController extends Controller
      * @return VotersList the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id): ActiveRecord
+    protected function findModel(int $id): ActiveRecord
     {
         if (($model = VotersList::findOne(['id' => $id])) !== null) {
             return $model;

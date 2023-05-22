@@ -3,15 +3,15 @@
 use yii\db\Migration;
 
 /**
- * Class m230521_091904_add_access_token_to_hidden
+ * Class m230521_191904_add_access_token_to_hidden
  */
-class m230521_091904_add_access_token_to_hidden extends Migration
+class m230521_191904_add_access_token_to_hidden extends Migration
 {/**
  * {@inheritdoc}
  */
     public function safeUp()
     {
-        $this->addColumn('hiddens', 'access_token', $this->string()->unique()->after('code'));
+        $this->addColumn('hiddens', 'access_token', $this->integer()->unique()->after('code'));
     }
 
     /**

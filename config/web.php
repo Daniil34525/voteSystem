@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     //'defaultRoute' => 'web',
     'components' => [
@@ -18,12 +18,20 @@ $config = [
             'cookieValidationKey' => 'Mykey',
             'baseUrl' => '',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'identityClass' => 'app\models\Users',
+            'enableAutoLogin' => false,
+        ],
+        'hidden' => [
+            'class' => 'yii\web\User',
+            'identityClass' => 'app\models\Hiddens',
+            'enableAutoLogin' => false,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
