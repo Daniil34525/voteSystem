@@ -27,7 +27,7 @@ class AnswerController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'update-create', 'delete'], // действия, к которым разрешен доступ
+                            'actions' => ['index', 'view', 'update-create', 'delete'], // действия, к которым разрешен доступ
                             'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
                         ],
                         [

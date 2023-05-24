@@ -37,7 +37,7 @@ class HiddensController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'create', 'delete', 'choice-hiddens'], // действия, к которым разрешен доступ
+                            'actions' => ['index', 'create', 'delete', 'choice-hiddens', 'create-hiddens-for-voters-list'], // действия, к которым разрешен доступ
                             'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
                         ],
                         [

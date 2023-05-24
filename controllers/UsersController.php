@@ -38,12 +38,12 @@ class UsersController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'update', 'delete', 'choice-user'], // действия, к которым разрешен доступ
+                            'actions' => ['index', 'create', 'view', 'update', 'delete', 'choice-user'], // действия, к которым разрешен доступ
                             'roles' => ['admin'], // разрешен доступ для авторизованных пользователей
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['login', 'create'],
+                            'actions' => ['login'],
                             'roles' => ['?'],
                         ],
                     ],
