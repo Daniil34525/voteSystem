@@ -4,6 +4,7 @@ namespace app\models;
 
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "users".
@@ -21,8 +22,10 @@ use yii\db\ActiveRecord;
  * @property UsersList[] $usersLists
  * @property VotersList[] $voterLists
  */
-class Users extends ActiveRecord
+class Users extends ActiveRecord implements IdentityInterface
 {
+    public $role;
+
     /**
      * {@inheritdoc}
      */
@@ -44,6 +47,7 @@ class Users extends ActiveRecord
             [['email'], 'unique'],
             [['phone'], 'unique'],
             [['role_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RoleTypes::class, 'targetAttribute' => ['role_type_id' => 'id']],
+            [['authKey', 'access_token'], 'safe'],
         ];
     }
 
@@ -67,6 +71,62 @@ class Users extends ActiveRecord
     public function getMiddleNameAndInitials(): string
     {
         return $this->middle_name . ' ' . $this->name . ' ' . $this->last_name;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function validateAuthKey($authKey): bool
+    {
+        return $this->authKey === $authKey;
+    }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    public static function findByEmail($email): ?Users
+    {
+        return static::findOne(['email' => $email]);
+    }
+
+    public static function findByCode($code): ?Hiddens
+    {
+        return Hiddens::findOne(['code' => $code]);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        // Поиск пользователя по токену доступа
+        $user = Users::findOne(['access_token' => $token]);
+        if ($user !== null) {
+            return $user;
+        }
+
+        // Поиск скрытого пользователя по токену доступа
+        $hiddenUser = Hiddens::findOne(['access_token' => $token]);
+        if ($hiddenUser !== null) {
+            return $hiddenUser;
+        }
+
+        // Если пользователь не найден, возвращаем null
+        return null;
+    }
+
+    public function getRole(): string
+    {
+        if ($this->roleType->title == 'Администратор')
+            $this->role = 'admin';
+        else $this->role = 'user';
+        return $this->role;
     }
 
     /**

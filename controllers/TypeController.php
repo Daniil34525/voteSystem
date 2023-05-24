@@ -8,6 +8,7 @@ use app\models\TypeSearch;
 use app\models\VotingTypes;
 use Exception;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -19,23 +20,24 @@ class TypeController extends Controller
         'RoleTypes' => RoleTypes::class,
         'VotingTypes' => VotingTypes::class
     ];
-/** @var string[] Названия модели (полное имя и название класса) */
+    /** @var string[] Названия модели (полное имя и название класса) */
     const TITLE = [
         QuestionTypes::class => 'Типы вопросов',
         RoleTypes::class => 'Типы ролей',
         VotingTypes::class => 'Типы голосований'
     ];
 
-    /** @var string Полное имя классz обрабатываемой модели. Вычисляется в init по значению гет-параметра $model */
+    /** @var string Полное имя класс обрабатываемой модели. Вычисляется в init по значению гет-параметра $model */
     private string $modelClass;
 
     /** @var string Короткое имя класса. См в init */
     private string $shortModelClass;
 
-//    /** {@inheritdoc} */
-//    public function behaviors(): array
-//    {
-//        return array_merge(parent::behaviors(), [
+    /** {@inheritdoc} */
+    public function behaviors(): array
+    {
+        return array_merge(parent::behaviors(),
+            [
 //            'ajax' => [
 //                'class' => AjaxFilter::class,
 //                'only' => [
@@ -43,8 +45,14 @@ class TypeController extends Controller
 //                    'update',
 //                ],
 //            ],
-//        ]);
-//    }
+                [
+                    'allow' => true,
+                    'actions' => ['index', 'update-create', 'delete'], // действия, к которым разрешен доступ
+                    'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                ],
+            ]
+        );
+    }
 
     /**
      *  ВНИМАНИЕ!! Для всех экшенов должен приходить обязательный параметр GET[model] с коротким именем класса
@@ -83,10 +91,13 @@ class TypeController extends Controller
         return $this->render('update_create', ['model' => $model, 'title' => $title]);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function actionDelete($id): Response
     {
         $modelObject = Yii::createObject($this->modelClass);
-        
+
         $model = $modelObject->findOne($id);
 
         if (!is_null($model)) $model->delete();

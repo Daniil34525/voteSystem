@@ -5,18 +5,37 @@ namespace app\controllers;
 use app\models\Votings;
 use app\models\VotingSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use app\models\BulletinsList;
 
 class VotingController extends Controller
 {
+    public function behaviors(): array
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update-create', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных пользователей
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+
     public function actionUpdateCreate($id = null)
     {
         // UPDATE:
         if (!is_null($id)) {
             $model = Votings::findOne($id);
-            
         } else $model = new Votings();
 
         $title = 'Редактирование';
@@ -34,10 +53,10 @@ class VotingController extends Controller
 
             if (!is_null($bulletins_id)) {
                 // ПИСАЛ ГЕНИЙ - НЕ ТРОГАТЬ !
-                foreach($bulletins_id as $bull_id) {
+                foreach ($bulletins_id as $bull_id) {
                     $bulletins_list = new BulletinsList();
                     $bulletins_list->voting_id = $model->id;
-                    $bulletins_list->bulletin_id = $bull_id; 
+                    $bulletins_list->bulletin_id = $bull_id;
                     $bulletins_list->save();
                 }
             }

@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Class m230521_091850_add_access_token_to_user
+ * Class m230521_191850_add_access_token_to_user
  */
-class m230521_091850_add_access_token_to_user extends Migration
+class m230521_191850_add_access_token_to_user extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addColumn('users', 'access_token', $this->string()->unique()->after('password_hash'));
+        $this->addColumn('users', 'access_token', $this->integer()->unique()->after('password_hash'));
     }
 
     /**
@@ -21,5 +21,5 @@ class m230521_091850_add_access_token_to_user extends Migration
     public function safeDown()
     {
         $this->dropColumn('users', 'access_token');
-    }
+     }
 }

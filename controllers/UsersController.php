@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\LoginForm;
 use app\models\Users;
 use app\models\UserSearch;
 use app\models\VotersList;
+use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -19,7 +22,7 @@ class UsersController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -28,6 +31,21 @@ class UsersController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update', 'delete', 'choice-user'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных пользователей
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['login', 'create'],
+                            'roles' => ['?'],
+                        ],
                     ],
                 ],
             ]
@@ -39,7 +57,7 @@ class UsersController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -56,7 +74,7 @@ class UsersController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -74,14 +92,21 @@ class UsersController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                if (Yii::$app->user->isGuest)
+                    $this->redirect('/users/login');
+                else
+                    return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
         }
 
+        if (Yii::$app->user->isGuest)
+            $model->role_type_id = 2;
+
         return $this->render('create', [
             'model' => $model,
+            'isGuest' => Yii::$app->user->isGuest
         ]);
     }
 
@@ -92,7 +117,7 @@ class UsersController extends Controller
      * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -112,13 +137,18 @@ class UsersController extends Controller
      * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
+    /**
+     * Метод используется для выбора пользователей при редактировании списка голосующих
+     * @param $votersListId
+     * @return Response
+     */
     public function actionChoiceUser($votersListId): Response
     {
         $data = [];
@@ -138,6 +168,21 @@ class UsersController extends Controller
         return $this->asJson(['result' => 'ok', 'type' => 'users', 'data' => $data]);
     }
 
+    public function actionLogin()
+    {
+        $model = new LoginForm(['typeUser' => 'user']);
+
+        // Проверка, была ли отправлена форма
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            // Авторизация прошла успешно, перенаправление на другую страницу
+            return $this->redirect(['site/index']);
+        }
+
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Finds the Users model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -145,7 +190,7 @@ class UsersController extends Controller
      * @return Users the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Users
     {
         if (($model = Users::findOne(['id' => $id])) !== null) {
             return $model;
