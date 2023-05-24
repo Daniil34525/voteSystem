@@ -8,8 +8,10 @@ use yii\helpers\Html;
  * @var Answers[] $answers
  */
 
-$this->title = 'Create Questions';
-$this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['index']];
+$this->registerCssFile('@web/css/question_create.css');
+
+$this->title = 'Создать вопрос';
+$this->params['breadcrumbs'][] = ['label' => 'Вопросы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="questions-create">

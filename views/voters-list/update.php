@@ -6,10 +6,10 @@ use yii\helpers\Html;
 /** @var app\models\VotersList $model */
 /** @var integer[] $userIds */
 
-$this->title = 'Update Voters List: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Voters Lists', 'url' => ['index']];
+$this->title = 'Редактирование списка избирателей: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Списки избирателей', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактирование';
 ?>
 <div class="voters-list-update">
 

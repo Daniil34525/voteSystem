@@ -11,6 +11,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\filters\AccessControl; 
 
 class TypeController extends Controller
 {
@@ -36,19 +37,25 @@ class TypeController extends Controller
     /** {@inheritdoc} */
     public function behaviors(): array
     {
-        return array_merge(parent::behaviors(),
+        return array_merge(
+            parent::behaviors(),
             [
-//            'ajax' => [
-//                'class' => AjaxFilter::class,
-//                'only' => [
-//                    'create',
-//                    'update',
-//                ],
-//            ],
-                [
-                    'allow' => true,
-                    'actions' => ['index', 'update-create', 'delete'], // действия, к которым разрешен доступ
-                    'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                //            'ajax' => [
+                //                'class' => AjaxFilter::class,
+                //                'only' => [
+                //                    'create',
+                //                    'update',
+                //                ],
+                //            ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update-create', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],
+                    ],
                 ],
             ]
         );
@@ -119,21 +126,21 @@ class TypeController extends Controller
         ]);
     }
 
-//    public function actionUpdate(int $id)
-//    {
-//        try {
-//            /** @var $modelClass Type */
-//            $modelClass = $this->modelClass;
-//            $modelObject = $modelClass::findOne($id);
-//
-//            if ($modelObject->load(Yii::$app->request->post()) && $modelObject->save()) {
-//                return $this->asJson(['success' => true]);
-//            }
-//
-//            return $this->renderAjax('update_create', ['model' => $modelObject]);
-//
-//        } catch (Exception $e) {
-//            return $this->asJson(['result' => 'err', 'message' => $e->getMessage()]);
-//        }
-//    }
+    //    public function actionUpdate(int $id)
+    //    {
+    //        try {
+    //            /** @var $modelClass Type */
+    //            $modelClass = $this->modelClass;
+    //            $modelObject = $modelClass::findOne($id);
+    //
+    //            if ($modelObject->load(Yii::$app->request->post()) && $modelObject->save()) {
+    //                return $this->asJson(['success' => true]);
+    //            }
+    //
+    //            return $this->renderAjax('update_create', ['model' => $modelObject]);
+    //
+    //        } catch (Exception $e) {
+    //            return $this->asJson(['result' => 'err', 'message' => $e->getMessage()]);
+    //        }
+    //    }
 }

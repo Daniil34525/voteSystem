@@ -4,34 +4,39 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
+$this->registerCssFile('@web/css/create_voters.css')
 /** @var yii\web\View $this */
 /** @var app\models\VotersList $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
-    <div class="voters-list-form">
+<div class="voters-list-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'id')->hiddenInput(); ?>
-        <?= $form->field($model, 'title')->textInput(['maxlength' => true]); ?>
+    <?= $form->field($model, 'id')->hiddenInput(); ?>
 
-        <div class="card">
-            <label for="choice">Выбор типа пользователя</label><select id="choice">
-                <option value="default" disabled <?= $model->status == null ? 'selected' : '' ?>>
-                    Выберите тип пользователя
-                </option>
-                <option value="users">Пользователь</option>
-                <option value="hiddens">Анонимный пользователь</option>
-            </select>
-        </div>
-        <div class="card" id="userChoice"></div>
-        <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-        </div>
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true]); ?>
 
-        <?php ActiveForm::end(); ?>
-
+    <div class="card" id="first">
+        <label for="choice">Выбор типа пользователя</label>
+        <select id="choice" class="form-select">
+            <option value="default" disabled <?= $model->status == null ? 'selected' : '' ?>>
+                Выберите тип пользователя
+            </option>
+            <option value="users">Пользователь</option>
+            <option value="hiddens">Анонимный пользователь</option>
+        </select>
     </div>
+    <div class="card" id="userChoice">
+    </div>
+</div>
+<div class="form-group">
+    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>
+
+</div>
 <?php
 $urlUser = Url::to(['users/choice-user']);
 $urlHiddens = Url::to(['hiddens/choice-hiddens']);

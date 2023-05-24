@@ -12,17 +12,18 @@ use yii\widgets\Pjax;
 
 
 
-$this->title = 'Bulletins';
+$this->title = 'Бюллетени';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="bulletins-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <hr/> 
     <p>
-        <?= Html::a('Create Bulletins', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать бюллетень', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+  
 
     <?php Pjax::begin(); ?>
 
@@ -40,4 +41,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?php Pjax::end(); ?>
+    
 </div>

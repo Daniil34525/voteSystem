@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="questions-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <hr/>
     <p>
-        <?= Html::a('Create Questions', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать вопрос', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
