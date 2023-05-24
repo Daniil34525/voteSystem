@@ -37,9 +37,11 @@ class LoginForm extends Model
     public function login(): bool
     {
         if ($this->validate()) {
-            if ($this->typeUser == 'user')
+            if ($this->typeUser == 'user') {
                 $user = $this->getUser();
-            elseif ($this->typeUser == 'hidden')
+                if (!password_verify($this->password, $user->password_hash))
+                    return false;
+            } elseif ($this->typeUser == 'hidden')
                 $user = $this->getHidden();
 
             if (isset($user)) {
@@ -50,9 +52,10 @@ class LoginForm extends Model
                 elseif ($user->getRole() == 'user')
                     $role = Yii::$app->authManager->getRole('user');
 
-                Yii::$app->user->login($user);
+                Yii::$app->user->login($user, 1);
                 if (isset($role)) {
-                    Yii::$app->authManager->assign($role, $user->id);
+                    if (!Yii::$app->authManager->getAssignment($role->name, $user->id))
+                        Yii::$app->authManager->assign($role, $user->id);
                 }
                 return true;
             }

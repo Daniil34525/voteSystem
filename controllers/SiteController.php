@@ -70,7 +70,6 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $a = Yii::$app->user;
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

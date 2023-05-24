@@ -6,6 +6,7 @@ use app\models\Answers;
 use app\models\Questions;
 use app\models\QuestionSearch;
 use yii\db\ActiveRecord;
+use yii\filters\AccessControl;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -32,10 +33,15 @@ class QuestionsController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                [
-                    'allow' => true,
-                    'actions' => ['index', 'update', 'create', 'delete'], // действия, к которым разрешен доступ
-                    'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update', 'create', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],
+                    ],
                 ],
             ]
         );
