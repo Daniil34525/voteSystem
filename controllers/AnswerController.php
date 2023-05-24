@@ -91,12 +91,12 @@ class AnswerController extends Controller
      */
     public function actionIndex(int $id = null): string
     {
-//        $models = Answers::find()->andFilterWhere(['id' => $id])->all();
+//      $models = Answers::find()->andFilterWhere(['id' => $id])->all();
         $searchModel = new AnswerSearch();
         $params = array_merge(Yii::$app->request->queryParams, ['id' => $id]);
         $dataProvider = $searchModel->search($params);
 
-        $title = 'просмотр ответов к конкретному вопросу';
+        $title = 'Просмотр ответов к конкретному вопросу';
 
         return $this->render('index', ['title' => $title, 'dataProvider' => $dataProvider]);
     }

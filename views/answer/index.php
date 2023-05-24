@@ -14,13 +14,16 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 $this->title = $title;
+$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="answers-index">
 
-<?= Html::a('Создать ответ', ['answer/update-create'], ['class' => 'btn btn-primary']) ?>
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body p-0">
+<h1><?= Html::encode($this->title) ?></h1>
+
+<p>
+<?= Html::a('Создать ответ', ['answer/update-create'], ['class' => 'btn btn-success']) ?>
+</p>
+
                 <?php Pjax::begin(['id' => 'pjax_container']) ?>
 
                 <?= GridView::widget([
@@ -76,7 +79,5 @@ $this->title = $title;
                 ]); ?>
 
                 <?php Pjax::end(); ?>
-            </div>
-        </div>
-    </div>
+
 </div>

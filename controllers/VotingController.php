@@ -83,6 +83,8 @@ class VotingController extends Controller
         $params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
 
-        return $this->render('index', ['dataProvider' => $dataProvider]);
+        $title = 'Голосования';
+        
+        return $this->render('index', ['title' => $title, 'dataProvider' => $dataProvider]);
     }
 }

@@ -12,17 +12,18 @@ use yii\widgets\Pjax;
 /** @var app\models\HiddenSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Hiddens';
+$this->registerCssFile("@web/css/hiddens.css");
+$this->title = 'Анонимные участники';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hiddens-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Hiddens', ['create'], ['class' => 'btn btn-success']) ?>
+    <div class="creation_menue">
+        <?= Html::a('Создать участника', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::input('number', 'hiddens_count', '1', ['max' => 100, 'min' => 1, 'class' => 'form-control', 'onchange' => 'myfunc(this.value)']) ?>
-    </p>
+    </div>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); 

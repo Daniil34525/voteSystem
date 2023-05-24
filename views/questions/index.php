@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\QuestionSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Questions';
+$this->title = 'Вопросы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="questions-index">
