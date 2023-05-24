@@ -6,6 +6,7 @@ use app\models\Answers;
 use app\models\Questions;
 use app\models\QuestionSearch;
 use yii\db\ActiveRecord;
+use yii\filters\AccessControl;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;

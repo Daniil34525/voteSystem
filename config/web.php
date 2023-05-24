@@ -25,10 +25,12 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
+            'authTimeout' => 3600,
             'identityClass' => 'app\models\Users',
             'enableAutoLogin' => false,
         ],
         'hidden' => [
+            'authTimeout' => 3600,
             'class' => 'yii\web\User',
             'identityClass' => 'app\models\Hiddens',
             'enableAutoLogin' => false,

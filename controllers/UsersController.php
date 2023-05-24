@@ -91,12 +91,14 @@ class UsersController extends Controller
         $model = new Users();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                if (Yii::$app->user->isGuest)
-                    $this->redirect('/users/login');
-                else
-                    return $this->redirect(['view', 'id' => $model->id]);
-            }
+            if ($model->load($this->request->post()))
+                $model->password_hash = password_hash($model->password_hash,PASSWORD_ARGON2ID);
+                if ($model->save()) {
+                    if (Yii::$app->user->isGuest)
+                        $this->redirect('/users/login');
+                    else
+                        return $this->redirect(['view', 'id' => $model->id]);
+                }
         } else {
             $model->loadDefaultValues();
         }
