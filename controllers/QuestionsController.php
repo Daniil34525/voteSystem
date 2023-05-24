@@ -13,7 +13,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-use yii\filters\AccessControl;
 
 /**
  * QuestionsController implements the CRUD actions for Questions model.
