@@ -10,8 +10,11 @@ use yii\widgets\Pjax;
 /** @var app\models\BulletinSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
+
+
 $this->title = 'Bulletins';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="bulletins-index">
 

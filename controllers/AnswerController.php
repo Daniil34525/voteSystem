@@ -5,12 +5,42 @@ namespace app\controllers;
 use app\models\Answers;
 use app\models\AnswerSearch;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
 
 // TODO: Временное решение, пока нет контроллера к вопросам, к которым будут создаваться ответы
 class AnswerController extends Controller
 {
+
+    /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update-create', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['view'], // действия, к которым разрешен доступ
+                            'roles' => ['@', '?'],
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+
     public function actionUpdateCreate($id = null, $questionId = null)
     {
         if (!is_null($id)) {
@@ -61,12 +91,12 @@ class AnswerController extends Controller
      */
     public function actionIndex(int $id = null): string
     {
-//        $models = Answers::find()->andFilterWhere(['id' => $id])->all();
+//      $models = Answers::find()->andFilterWhere(['id' => $id])->all();
         $searchModel = new AnswerSearch();
         $params = array_merge(Yii::$app->request->queryParams, ['id' => $id]);
         $dataProvider = $searchModel->search($params);
 
-        $title = 'просмотр ответов к конкретному вопросу';
+        $title = 'Просмотр ответов к конкретному вопросу';
 
         return $this->render('index', ['title' => $title, 'dataProvider' => $dataProvider]);
     }

@@ -4,7 +4,10 @@ namespace app\controllers;
 
 use app\models\Hiddens;
 use app\models\HiddenSearch;
+use app\models\LoginForm;
 use app\models\VotersList;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -18,7 +21,7 @@ class HiddensController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -27,6 +30,21 @@ class HiddensController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'create', 'delete', 'choice-hiddens'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['login'],
+                            'roles' => ['?'],
+                        ],
                     ],
                 ],
             ]
@@ -38,7 +56,7 @@ class HiddensController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new HiddenSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -52,9 +70,10 @@ class HiddensController extends Controller
     /**
      * Creates a new Hiddens model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @param int $count
+     * @return Response
      */
-    public function actionCreate($count = 1)
+    public function actionCreate(int $count = 1): Response
     {
         for ($i = 0; $i < $count; $i++) {
             $model = new Hiddens();
@@ -69,17 +88,18 @@ class HiddensController extends Controller
      * Deletes an existing Hiddens model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id Идентифактор анонимного участника
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
-    public function actionCreateHiddensForVotersList($count, $votersListId){
+    public function actionCreateHiddensForVotersList($count, $votersListId): Response
+    {
         $voterModel = VotersList::find()->where(['id' => $votersListId])->one();
         for ($i = 0; $i < $count; $i++) {
             $model = new Hiddens();
@@ -88,6 +108,28 @@ class HiddensController extends Controller
             $model->link('voterLists', $voterModel);
         }
         return $this->asJson(['result' => 'ok']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function actionLogin()
+    {
+        if (Yii::$app->user->isGuest)
+            if (Yii::$app->hidden->isGuest) {
+                $model = new LoginForm(['typeUser' => 'hidden']);
+
+                // Проверка, была ли отправлена форма
+                if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                    // Авторизация прошла успешно, перенаправление на другую страницу
+                    return $this->redirect(['site/index']);
+                }
+
+                return $this->render('login', [
+                    'model' => $model,
+                ]);
+            }
+        return $this->redirect(['/bulletins/index']);
     }
 
     public function actionChoiceHiddens($votersListId): Response
@@ -106,7 +148,7 @@ class HiddensController extends Controller
             $data[] = $arrItem;
         }
         $hiddensPresence = !empty($hiddensIds);
-        return $this->asJson(['result' => 'ok', 'type' => 'hiddens',  'hiddensPresence' => $hiddensPresence, 'data' => $data]);
+        return $this->asJson(['result' => 'ok', 'type' => 'hiddens', 'hiddensPresence' => $hiddensPresence, 'data' => $data]);
     }
 
     /**
@@ -116,7 +158,7 @@ class HiddensController extends Controller
      * @return Hiddens the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Hiddens
     {
         if (($model = Hiddens::findOne(['id' => $id])) !== null) {
             return $model;

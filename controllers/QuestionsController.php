@@ -11,6 +11,8 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\filters\AccessControl;
 
 /**
  * QuestionsController implements the CRUD actions for Questions model.
@@ -20,7 +22,7 @@ class QuestionsController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -29,6 +31,16 @@ class QuestionsController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update', 'create', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],
                     ],
                 ],
             ]
@@ -40,7 +52,7 @@ class QuestionsController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new QuestionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -57,7 +69,7 @@ class QuestionsController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -67,7 +79,7 @@ class QuestionsController extends Controller
     /**
      * Creates a new Questions model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -111,10 +123,10 @@ class QuestionsController extends Controller
      * Updates an existing Questions model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id Идентификатор вопроса
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -149,10 +161,10 @@ class QuestionsController extends Controller
      * Deletes an existing Questions model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id Идентификатор вопроса
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -184,7 +196,7 @@ class QuestionsController extends Controller
      * @return Questions the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id): ActiveRecord
+    protected function findModel(int $id): ActiveRecord
     {
         if (($model = Questions::findOne(['id' => $id])) !== null) {
             return $model;

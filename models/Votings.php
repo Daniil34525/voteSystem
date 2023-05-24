@@ -62,7 +62,7 @@ class Votings extends ActiveRecord
     public function attributeLabels(): array
     {
         return [
-            'id' => 'id',
+            'id' => 'Идентификатор голосования',
             'title' => 'Наименование голосования',
             'voters_list_id' => 'Идентификатор список избирателей',
             'voting_type_id' => 'Тип',

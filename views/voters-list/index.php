@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 /** @var app\models\VotersListSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Voters Lists';
+$this->title = 'Списки избирателей';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="voters-list-index">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Voters List', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать список избирателей', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

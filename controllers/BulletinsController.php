@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Bulletins;
 use app\models\BulletinSearch;
 use yii\behaviors\TimestampBehavior;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,7 +28,22 @@ class BulletinsController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                     ]
-                ]
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'update', 'create', 'delete'], // действия, к которым разрешен доступ
+                            'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['view'], // действия, к которым разрешен доступ
+                            'roles' => ['@', '?'],
+                        ],
+                    ],
+                ],
             ]
         );
     }

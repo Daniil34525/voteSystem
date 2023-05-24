@@ -1,7 +1,8 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var string $content */
+/** @var yii\web\View $this
+ * @var string $content
+ */
 
 use app\assets\AppAsset;
 use app\widgets\Alert;
@@ -22,48 +23,67 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
+
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="d-flex flex-column h-100">
-<?php $this->beginBody() ?>
 
-<header id="header">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            ['label' => 'Голосование', 'url' => ['/voting/index']],
-            ['label' => 'Пользователи', 'url' => ['/users/index']],
-            ['label' => 'Ответы', 'url' => ['/answer/index']],
-            ['label' => 'Бюллетени', 'url' => ['/bulletins/index']],
-            ['label' => 'Анонимы', 'url' => ['/hiddens/index']],
-            ['label' => 'Вопросы', 'url' => ['/questions/index']],
-            ['label' => 'Список голосующих', 'url' => ['/voters-list/index']],
-            [
-                'label' => 'Типы',
-                'url' => '#',
-                'items' => [
-                    ['label' => 'Тип вопроса', 'url' => ['/type/index?model=QuestionTypes']],
-                    ['label' => 'Тип голосования', 'url' => ['/type/index?model=VotingTypes']],
-                    ['label' => 'Роль', 'url' => ['/type/index?model=RoleTypes']],
-                ]
+<?php
+
+NavBar::begin([
+    'brandLabel' => Yii::$app->name,
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+]);
+
+echo Nav::widget([
+    'options' => ['class' => 'navbar-nav'],
+    'items' => [
+        [
+            'label' => 'Компоненты',
+            'visible' => Yii::$app->user->can('createAll'),
+            'url' => '#',
+            'options' => ['class' => 'nav-item dropdown'],
+            'items' => [
+                ['label' => 'Голосование', 'url' => ['/voting/index']],
+                ['label' => 'Пользователи', 'url' => ['/users/index']],
+                ['label' => 'Анонимы', 'url' => ['/hiddens/index']],
+                ['label' => 'Вопросы', 'url' => ['/questions/index']],
+                ['label' => 'Ответы', 'url' => ['/answer/index']],
+                ['label' => 'Бюллетени', 'url' => ['/bulletins/index']],
+                ['label' => 'Списки избирателей', 'url' => ['/voters-list/index']]
             ]
-        ]
-    ]);
-    NavBar::end();
-    ?>
-</header>
+        ],
+        [
+            'label' => 'Типы',
+            'url' => '#',
+            'visible' => Yii::$app->user->can('createAll'),
+            'items' => [
+                ['label' => 'Тип вопроса', 'url' => ['/type/index?model=QuestionTypes']],
+                ['label' => 'Тип голосования', 'url' => ['/type/index?model=VotingTypes']],
+                ['label' => 'Роль', 'url' => ['/type/index?model=RoleTypes']],
+            ]
+        ],
+        [
+            'label' => 'Войти',
+            'visible' => Yii::$app->user->isGuest,
+            'url' => ['/site/login']
+        ],
+        [
+            'label' => 'Выйти',
+            'visible' => !Yii::$app->user->isGuest,
+            'url' => ['/site/logout']
+        ],
+    ]
+]);
+NavBar::end();
+?>
 
-<main id="main" class="flex-shrink-0" role="main">
+
+<main id="main" role="main">
     <div class="container">
-        <?php if (!empty($this->params['breadcrumbs'])): ?>
+        <?php if (!empty($this->params['breadcrumbs'])) : ?>
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
         <?php endif ?>
         <?= Alert::widget() ?>
@@ -71,16 +91,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </div>
 </main>
 
-<footer id="footer" class="mt-auto py-3 bg-light">
-    <div class="container">
-        <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; The Best Voting <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
-        </div>
-    </div>
+<footer id="footer">
+    <h5> Система электронного голосования КГУ </h5>
 </footer>
 
 <?php $this->endBody() ?>
 </body>
+
 </html>
 <?php $this->endPage() ?>
