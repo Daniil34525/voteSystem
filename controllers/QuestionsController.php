@@ -13,7 +13,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-use yii\filters\AccessControl;
 
 /**
  * QuestionsController implements the CRUD actions for Questions model.
@@ -39,7 +38,7 @@ class QuestionsController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'update', 'create', 'delete'], // действия, к которым разрешен доступ
+                            'actions' => ['index', 'update', 'create', 'delete', 'modal-content'], // действия, к которым разрешен доступ
                             'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
                         ],
                     ],
