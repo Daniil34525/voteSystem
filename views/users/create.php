@@ -7,8 +7,8 @@ use yii\helpers\Html;
  * @var bool $isGuest
  */
 
-$this->title = 'Create Users';
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->title = 'Создание пользователя';
+$this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="users-create">

@@ -1,0 +1,11 @@
+#w0 > div.form-group.field-voterslist-id > label{
+    display: none;
+}
+
+.card {
+    margin-top: 10px;
+}
+
+#first {
+    padding: 10px;
+}

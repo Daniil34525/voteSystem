@@ -1,0 +1,11 @@
+#save {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#save > button {
+    min-width: 150px;
+    box-shadow: 0px 2px 10px black;
+}

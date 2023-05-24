@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="hiddens-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <hr/>
 
     <div class="creation_menue">
         <?= Html::a('Создать участника', ['create'], ['class' => 'btn btn-success']) ?>

@@ -17,8 +17,8 @@ use app\models\Bulletins;
 <div class="questions-form">
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div id="save" class="form-group">
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?= $form->field($model, 'question_title')->textInput(['maxlength' => true]) ?>
@@ -44,7 +44,7 @@ use app\models\Bulletins;
     </div>
 
     <div>
-        <?= Html::button('Создать ответ', ['id' => 'createAnswer', 'data-model-id' => $model->id]); ?>
+        <?= Html::button('Добавить ответ', ['id' => 'createAnswer', 'class' => 'btn btn-secondary', 'data-model-id' => $model->id]); ?>
     </div>
 
     <?php ActiveForm::end(); ?>

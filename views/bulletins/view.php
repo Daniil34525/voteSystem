@@ -7,12 +7,16 @@ use yii\debug\models\timeline\DataProvider;
 
 $this->title = $model->title;
 $this->registerCssFile("@web/css/bulletins.css");
+$this->title = 'Просмотр бюллетени: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Бюллетени', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Просмотр';
 ?>
 
 <div class="main_container">
     <div class="bulletin_head">
         <h2> <?= $model->title ?></h2>
-        <h5> <?= Yii::$app->formatter->asDatetime($model->created_at, 'php:d.m.Y H:i'); ?></h5>
+        <h6> <?= Yii::$app->formatter->asDatetime($model->created_at, 'php:d.m.Y H:i'); ?></h6>
     </div>
 
     <div class="content">

@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\VotersList $model */
 
-$this->title = 'Create Voters List';
-$this->params['breadcrumbs'][] = ['label' => 'Voters Lists', 'url' => ['index']];
+$this->title = 'Создание списка избирателей';
+$this->params['breadcrumbs'][] = ['label' => 'Списки избирателей', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="voters-list-create">

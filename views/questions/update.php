@@ -9,10 +9,10 @@ use yii\helpers\Html;
  * @var Answers[] $answers
  */
 
-$this->title = 'Update Questions: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['index']];
+$this->title = 'Редактирование вопроса: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Вопросы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактирование';
 ?>
 <div class="questions-update">
 

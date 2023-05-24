@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="voters-list-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <hr/>
     <p>
         <?= Html::a('Создать список избирателей', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
