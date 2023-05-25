@@ -52,7 +52,8 @@ echo Nav::widget([
                 ['label' => 'Вопросы', 'url' => ['/questions/index']],
                 ['label' => 'Ответы', 'url' => ['/answer/index']],
                 ['label' => 'Бюллетени', 'url' => ['/bulletins/index']],
-                ['label' => 'Списки избирателей', 'url' => ['/voters-list/index']]
+                ['label' => 'Списки избирателей', 'url' => ['/voters-list/index']],
+                ['label' => 'Выбор текущего голосования', 'url' => ['/voting/select?user_id=' . Yii::$app->user->id]],
             ]
         ],
         [

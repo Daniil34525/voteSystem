@@ -10,6 +10,10 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use app\models\BulletinsList;
+use app\models\Users;
+use app\models\VotersList;
+use app\models\UsersList;
+
 
 class VotingController extends Controller
 {
@@ -28,8 +32,13 @@ class VotingController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['elections', 'show-answers'], // действия, к которым разрешен доступ
+                            'actions' => ['elections', 'show-answers', 'select'], // действия, к которым разрешен доступ
                             'roles' => ['@'], // разрешен доступ для авторизованных
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['select'],
+                            'roles' => ['user'],
                         ],
                     ],
                 ],
@@ -119,5 +128,24 @@ class VotingController extends Controller
     {
         $votingModel = Votings::find()->where(['id' => $id])->one();
         return $this->render('answers', ['votingModel' => $votingModel]);
+    }
+
+    public function actionSelect($user_id = null)
+    {
+        /**
+         * @var Users $user
+         * @var VotersList[] $votersList
+         */
+        $user = Users::find()->where(['id' => $user_id])->one();
+
+        $votersList = $user->voterLists;
+
+        $enabled_votings = [];
+
+        foreach ($votersList as $list) {
+            array_push($enabled_votings, $list->votings);
+        }
+
+        return $this->render('voting_select', ['votings' => $enabled_votings]);
     }
 }
