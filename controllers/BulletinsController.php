@@ -98,7 +98,7 @@ class BulletinsController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect('index', 302);
+            return $this->redirect('index', 301);
         }
 
         return $this->render('update', [
