@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
  * @property string|null $overview Дополнительное описание сути вопроса
  * @property int $type_id Идентификтор типа вопроса
  *
+ * @property Answers[] $answers
  * @property Bulletins $bulletin
  * @property QuestionTypes $type
  */

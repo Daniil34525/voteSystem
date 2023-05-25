@@ -18,7 +18,6 @@ use yii\db\ActiveRecord;
  */
 class Answers extends ActiveRecord
 {
-//    private $votersModels;
     /**
      * {@inheritdoc}
      */

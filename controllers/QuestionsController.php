@@ -40,6 +40,10 @@ class QuestionsController extends Controller
                             'allow' => true,
                             'actions' => ['index', 'update', 'create', 'delete', 'modal-content'], // действия, к которым разрешен доступ
                             'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
+                        ],[
+                            'allow' => true,
+                            'actions' => ['view'], // действия, к которым разрешен доступ
+                            'roles' => ['@'], // разрешен доступ для авторизованных администраторов
                         ],
                     ],
                 ],
