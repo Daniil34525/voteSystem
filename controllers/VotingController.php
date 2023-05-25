@@ -28,7 +28,7 @@ class VotingController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['elections'], // действия, к которым разрешен доступ
+                            'actions' => ['elections', 'show-answers'], // действия, к которым разрешен доступ
                             'roles' => ['@'], // разрешен доступ для авторизованных
                         ],
                     ],
@@ -94,21 +94,30 @@ class VotingController extends Controller
         return $this->render('index', ['title' => $title, 'dataProvider' => $dataProvider]);
     }
 
-    public function actionElections($id = null): string
+    public function actionElections($id = null)
     {
-        if($this->request->isPost){
+        if ($this->request->isPost) {
             $post = $this->request->post();
             $answersIds = $post['answer'];
-            foreach ($answersIds as $key => $id) {
-                $answer = Answers::find()->where(['id' => $key])->one();
-                $voters = $answer->voters;
-                $userId = Yii::$app->user->id;
-                $a = Yii::$app->authManager->getRolesByUser($userId);
-                $voters[array_key_first($a)][] = $userId;
-            }
-            $this->redirect('index');
+            if (is_iterable($answersIds))
+                foreach ($answersIds as $key => $id) {
+                    $answer = Answers::find()->where(['id' => $key])->one();
+                    $voters = $answer->voters;
+                    $userId = Yii::$app->user->id;
+                    $a = Yii::$app->authManager->getRolesByUser($userId);
+                    $voters[array_key_first($a)][] = $userId;
+                    $answer->voters = $voters;
+                    $answer->save();
+                }
+            return $this->redirect('index');
         }
         $votingModel = Votings::find()->where(['id' => $id])->one();
-        return $this->render('elections', ['votingsModel' => $votingModel]);
+        return $this->render('elections', ['votingModel' => $votingModel]);
+    }
+
+    public function actionShowAnswers($id = null): string
+    {
+        $votingModel = Votings::find()->where(['id' => $id])->one();
+        return $this->render('answers', ['votingModel' => $votingModel]);
     }
 }

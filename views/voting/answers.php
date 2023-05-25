@@ -1,7 +1,6 @@
 <?php
 
 use app\models\Votings;
-use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
@@ -20,10 +19,12 @@ use yii\widgets\ActiveForm;
                         <div class="card-body"><p><?= $question->overview; ?></p></div>
                         <div class="card">
                             <?php foreach ($question->answers as $answer) : ?>
-                                <div>
-                                    <?= Html::checkbox("answer[$answer->id]", false, ['id' => 'answer' . $answer->id]); ?>
-                                    <label for="<?= 'answer' . $answer->id ?>"> <?= $answer->title; ?></label>
-                                </div>
+                                <?php
+                                $userId = Yii::$app->user->id;
+                                $role = Yii::$app->authManager->getRolesByUser($userId);
+                                if (in_array($userId, $answer->voters[array_key_first($role)])) : ?>
+                                    <div class="btn-primary"> <?= $answer->title; ?></div>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -31,8 +32,5 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
     <?php endforeach; ?>
-</div>
-<div>
-    <?= Html::submitButton('Сохранить ответы',); ?>
 </div>
 <?php ActiveForm::end(); ?>
