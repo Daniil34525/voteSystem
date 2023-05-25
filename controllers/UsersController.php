@@ -43,7 +43,7 @@ class UsersController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['login'],
+                            'actions' => ['login', 'create'],
                             'roles' => ['?'],
                         ],
                     ],
