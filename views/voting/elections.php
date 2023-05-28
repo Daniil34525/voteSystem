@@ -2,6 +2,7 @@
 
 use app\models\Votings;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /**
@@ -9,30 +10,30 @@ use yii\widgets\ActiveForm;
  */
 ?>
 <?php $form = ActiveForm::begin(); ?>
-<div class="card-group">
-    <?php foreach ($votingModel->bulletins as $bulletin) : ?>
-        <div class="card">
-            <p><?= $bulletin->title; ?></p>
-            <div class="card">
-                <?php foreach ($bulletin->questions as $question) : ?>
-                    <div class="card" style='margin-bottom:10px;'>
-                        <?= $question->question_title; ?>
-                        <div class="card-body"><p><?= $question->overview; ?></p></div>
-                        <div class="card">
-                            <?php foreach ($question->answers as $answer) : ?>
-                                <div>
-                                    <?= Html::checkbox("answer[$answer->id]", false, ['id' => 'answer' . $answer->id]); ?>
-                                    <label for="<?= 'answer' . $answer->id ?>"> <?= $answer->title; ?></label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    <?php endforeach; ?>
-</div>
-<div>
-    <?= Html::submitButton('Сохранить ответы',); ?>
-</div>
+    <div class="card-group" id="bulletin_select" data-val="4"></div>
+    <div>
+        <?= Html::submitButton('Сохранить ответы'); ?>
+    </div>
 <?php ActiveForm::end(); ?>
+<?php
+$url = Url::to('selected-bulletin');
+$js = <<<JS
+$(document).ready(function() {
+    getSelectionBulletin()
+    //setInterval(getSelectionBulletin, 5000)
+});
+
+function getSelectionBulletin() {
+    let a = $('#bulletin_select').attr('data-val');
+    $.get("$url", { 'votingId': "$votingModel->id", 'bulletinId': a }, function(data) {
+        if(data.result === 'ok') {
+            $('#bulletin_select').html(data.html)
+            $('#bulletin_select').attr('data-val', data.id)
+        }
+        setTimeout(getSelectionBulletin, 2000);
+}).fail(function() {
+    setTimeout(getSelectionBulletin, 2000);
+  })
+}  
+JS;
+$this->registerJs($js);
