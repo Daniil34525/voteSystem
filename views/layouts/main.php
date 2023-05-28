@@ -21,97 +21,86 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_k
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 ?>
 <?php $this->beginPage() ?>
-    <!DOCTYPE html>
-    <html lang="<?= Yii::$app->language ?>" class="h-100">
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>" class="h-100">
 
-    <head>
-        <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
-    </head>
+<head>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body>
+<?php
+NavBar::begin([
+    'brandLabel' => Yii::$app->name,
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+]);
 
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
-    ]);
-
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            [
-                'label' => 'Голосования',
-                'visible' => Yii::$app->user->can('vote'),
-                'items' => [
-                    [
-                        'label' => 'Доступные',
-                        'visible' => Yii::$app->user->can('vote'),
-                        'url' => ['/voting/select?user_id=' . Yii::$app->user->id]
-                    ],
-                    [
-                        'label' => 'Ответы',
-                        'visible' => Yii::$app->user->can('viewYourAnswer'),
-                        'url' => ['/voting/?user_id=' . Yii::$app->user->id]
-                    ]
-                ],
-            ],
-            [
-                'label' => 'Компоненты',
-                'visible' => Yii::$app->user->can('createAll'),
-                'url' => '#',
-                'options' => ['class' => 'nav-item dropdown'],
-                'items' => [
-                    ['label' => 'Голосование', 'url' => ['/voting/index']],
-                    ['label' => 'Пользователи', 'url' => ['/users/index']],
-                    ['label' => 'Анонимы', 'url' => ['/hiddens/index']],
-                    ['label' => 'Вопросы', 'url' => ['/questions/index']],
-                    ['label' => 'Ответы', 'url' => ['/answer/index']],
-                    ['label' => 'Бюллетени', 'url' => ['/bulletins/index']],
-                    ['label' => 'Списки избирателей', 'url' => ['/voters-list/index']],
-                ]
-            ],
-            [
-                'label' => 'Типы',
-                'url' => '#',
-                'visible' => Yii::$app->user->can('createAll'),
-                'items' => [
-                    ['label' => 'Тип вопроса', 'url' => ['/type/index?model=QuestionTypes']],
-                    ['label' => 'Тип голосования', 'url' => ['/type/index?model=VotingTypes']],
-                    ['label' => 'Роль', 'url' => ['/type/index?model=RoleTypes']],
-                ]
-            ],
-            [
-                'label' => 'Войти',
-                'visible' => Yii::$app->user->isGuest,
-                'url' => ['/site/login']
-            ],
-            [
-                'label' => 'Выйти',
-                'visible' => !Yii::$app->user->isGuest,
-                'url' => ['/site/logout']
-            ],
-        ]
-    ]);
-    NavBar::end();
-    ?>
+echo Nav::widget([
+    'options' => ['class' => 'navbar-nav'],
+    'items' => [
+        [
+            'label' => 'Голосования',
+            'visible' => Yii::$app->user->can('vote'),
+            'url' => ['/voting/select']
+        ],
+        [
+            'label' => 'Компоненты',
+            'visible' => Yii::$app->user->can('createAll'),
+            'url' => '#',
+            'options' => ['class' => 'nav-item dropdown'],
+            'items' => [
+                ['label' => 'Голосование', 'url' => ['/voting/index']],
+                ['label' => 'Пользователи', 'url' => ['/users/index']],
+                ['label' => 'Анонимы', 'url' => ['/hiddens/index']],
+                ['label' => 'Вопросы', 'url' => ['/questions/index']],
+                ['label' => 'Ответы', 'url' => ['/answer/index']],
+                ['label' => 'Бюллетени', 'url' => ['/bulletins/index']],
+                ['label' => 'Списки избирателей', 'url' => ['/voters-list/index']],
+            ]
+        ],
+        [
+            'label' => 'Типы',
+            'url' => '#',
+            'visible' => Yii::$app->user->can('createAll'),
+            'items' => [
+                ['label' => 'Тип вопроса', 'url' => ['/type/index?model=QuestionTypes']],
+                ['label' => 'Тип голосования', 'url' => ['/type/index?model=VotingTypes']],
+                ['label' => 'Роль', 'url' => ['/type/index?model=RoleTypes']],
+            ]
+        ],
+        [
+            'label' => 'Войти',
+            'visible' => Yii::$app->user->isGuest,
+            'url' => ['/site/login']
+        ],
+        [
+            'label' => 'Выйти',
+            'visible' => !Yii::$app->user->isGuest,
+            'url' => ['/site/logout']
+        ],
+    ]
+]);
+NavBar::end();
+?>
 
 
-    <main id="main" role="main">
-        <div class="container">
-            <?php if (!empty($this->params['breadcrumbs'])) : ?>
-                <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-            <?php endif ?>
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </div>
-    </main>
+<main id="main" role="main">
+    <div class="container">
+        <?php if (!empty($this->params['breadcrumbs'])) : ?>
+            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+        <?php endif ?>
+        <?= Alert::widget() ?>
+        <?= $content ?>
+    </div>
+</main>
 
-    <footer id="footer">
-        <h5> Система электронного голосования КГУ </h5>
-    </footer>
+<footer id="footer">
+    <h5> Система электронного голосования КГУ </h5>
+</footer>
 
-    <?php $this->endBody() ?>
-    </body>
+<?php $this->endBody() ?>
+</body>
 
-    </html>
+</html>
 <?php $this->endPage() ?>

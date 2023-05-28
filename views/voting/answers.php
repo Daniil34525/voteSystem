@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Votings;
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
@@ -22,9 +23,9 @@ use yii\widgets\ActiveForm;
                                 <?php
                                 $userId = Yii::$app->user->id;
                                 $role = Yii::$app->authManager->getRolesByUser($userId);
-                                if (in_array($userId, $answer->voters[array_key_first($role)])) : ?>
-                                    <div class="btn-primary"> <?= $answer->title; ?></div>
-                                <?php endif; ?>
+                                if (in_array($userId, $answer->voters[array_key_first($role)])) { ?>
+                                    <?= Html::tag('div', $answer->title, ['class' => 'bg-success']) ?>
+                                <?php } else { echo $answer->title; } ?>
                             <?php endforeach; ?>
                         </div>
                     </div>

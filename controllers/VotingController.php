@@ -103,13 +103,18 @@ class VotingController extends Controller
         return $this->render('index', ['title' => $title, 'dataProvider' => $dataProvider]);
     }
 
-    public function actionElections($id = null)
+    /**
+     * Экшен позволяет работать с процессом голосования
+     * @param int|null $id Пользователя
+     * @return string|Response
+     */
+    public function actionElections(int $id = null)
     {
         if ($this->request->isPost) {
             $post = $this->request->post();
             $answersIds = $post['answer'];
             if (is_iterable($answersIds))
-                foreach ($answersIds as $key => $id) {
+                foreach ($answersIds as $key => $ids) {
                     $answer = Answers::find()->where(['id' => $key])->one();
                     $voters = $answer->voters;
                     $userId = Yii::$app->user->id;
@@ -120,30 +125,41 @@ class VotingController extends Controller
                 }
             return $this->redirect('index');
         }
-        $votingModel = Votings::find()->where(['id' => $id])->one();
-        return $this->render('elections', ['votingModel' => $votingModel]);
+        if ($votingModel = Votings::find()->where(['id' => $id])->one())
+            return $this->render('elections', ['votingModel' => $votingModel]);
+        return $this->redirect('select', 301);
     }
 
-    public function actionShowAnswers($id = null): string
+    /**
+     * Экшен позволяет показать ответы на вопросы
+     * @param $id
+     * @return string
+     */
+    public function actionShowAnswers($id = null)
     {
-        $votingModel = Votings::find()->where(['id' => $id])->one();
-        return $this->render('answers', ['votingModel' => $votingModel]);
+        if ($votingModel = Votings::find()->where(['id' => $id])->one())
+            return $this->render('answers', ['votingModel' => $votingModel]);
+        else $this->redirect('select');
     }
 
-    public function actionSelect($user_id = null)
+    /**
+     * Экшен позволяет выбирать из доступных голосований
+     * @return string
+     */
+    public function actionSelect(): string
     {
         /**
          * @var Users $user
          * @var VotersList[] $votersList
          */
-        $user = Users::find()->where(['id' => $user_id])->one();
+        $user = Users::find()->where(['id' => Yii::$app->user->id])->one();
 
         $votersList = $user->voterLists;
 
         $enabled_votings = [];
 
         foreach ($votersList as $list) {
-            array_push($enabled_votings, $list->votings);
+            $enabled_votings[] = $list->votings;
         }
 
         return $this->render('voting_select', ['votings' => $enabled_votings]);
