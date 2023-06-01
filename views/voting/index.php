@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{update} {delete}',
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
-                        return Html::a('Обновить', Url::to(['update-create', 'id' => $key]));
+                        return Html::a(Html::img(""), Url::to(['update-create', 'id' => $key]));
                     }
                 ]
             ],

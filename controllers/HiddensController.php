@@ -65,6 +65,7 @@ class HiddensController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    
     }
 
     /**

@@ -130,22 +130,31 @@ class VotingController extends Controller
         return $this->render('answers', ['votingModel' => $votingModel]);
     }
 
+    // Метод для получения всех голсований, которе оносятся к текущему пользователю:
     public function actionSelect($user_id = null)
     {
         /**
          * @var Users $user
          * @var VotersList[] $votersList
          */
+        // Получение самного пользователя:
         $user = Users::find()->where(['id' => $user_id])->one();
 
-        $votersList = $user->voterLists;
+        // Получение массива списков участников голосований, к которым относится текущеий пользователь:
+        $votersList = $user->voterLists; // Массив моделей VotersList:
 
         $enabled_votings = [];
 
+        // Для каждого элемента из массива моделей VotersList:
         foreach ($votersList as $list) {
-            array_push($enabled_votings, $list->votings);
+            // Получаем опредленное количество голований,
+            // в которые может входить один и тоже VotersList (список голосующих):
+            $enabled_votings[] = $list->votings;
         }
+        // $enabled_votings = {
+        // [0] => [массив голосований для первого списка голосущих]
+        // }
 
-        return $this->render('voting_select', ['votings' => $enabled_votings]);
+        return $this->render('voting_select', ['data' => $enabled_votings]);
     }
 }

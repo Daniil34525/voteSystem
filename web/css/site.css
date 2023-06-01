@@ -44,7 +44,8 @@ a.desc:after {
 }
 
 a {
-    text-decoration: none;
+    text-decoration: underline;
+    color: rgb(27, 27, 27);
 }
 
 .grid-view th {
@@ -55,6 +56,14 @@ a {
     display: block;
     margin-top: 5px;
     color: #999;
+}
+
+nav {
+    background-color: rgb(27, 27, 27);
+}
+
+#main > div > nav {
+    background-color: white;
 }
 
 .error-summary {

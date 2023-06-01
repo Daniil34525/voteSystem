@@ -1,0 +1,27 @@
+.vote {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid gray;
+    align-items: baseline;
+    padding: 10px;
+    border-radius: 20px;
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.vote a {
+    text-decoration: none;
+    color: rgb(35, 35, 35);
+}
+
+.vote_show {
+    margin: auto auto auto 10px;
+}
+
+.show_answers { 
+    padding: 10px; 
+    background-color: rgb(205, 205, 205);
+    margin: auto 20px auto auto;
+    border-radius: 10px;
+}
+
