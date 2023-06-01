@@ -143,27 +143,39 @@ class VotingController extends Controller
         else $this->redirect('select');
     }
 
+
+
     /**
      * Экшен позволяет выбирать из доступных голосований
      * @return string
      */
     public function actionSelect(): string
+
     {
         /**
          * @var Users $user
          * @var VotersList[] $votersList
          */
+
+
         $user = Users::find()->where(['id' => Yii::$app->user->id])->one();
 
-        $votersList = $user->voterLists;
+        // Получение массива списков участников голосований, к которым относится текущеий пользователь:
+        $votersList = $user->voterLists; // Массив моделей VotersList:
 
         $enabled_votings = [];
 
+        // Для каждого элемента из массива моделей VotersList:
         foreach ($votersList as $list) {
+
+
             $enabled_votings[] = $list->votings;
         }
+        // $enabled_votings = {
+        // [0] => [массив голосований для первого списка голосущих]
+        // }
 
-        return $this->render('voting_select', ['votings' => $enabled_votings]);
+        return $this->render('voting_select', ['data' => $enabled_votings]);
     }
 
     public function actionControl($id)

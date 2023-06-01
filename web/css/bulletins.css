@@ -2,16 +2,12 @@
     display: flex;
     flex-direction: column;
     /* border: 2px solid gray; */
-    border: 2px solid rgb(66, 66, 66);
+    border: 2px solid rgb(27, 27, 27);
     border-radius: 22px;
 }
 
-.content {
-    padding: 25px; 
-}
-
 .bulletin_head {
-    background-color: rgb(66, 66, 66);
+    background-color: rgb(27, 27, 27);
     color: white; 
     padding-left: 20px;
     border-radius: 20px 20px 0px 0px;
@@ -20,4 +16,23 @@
 
 h6 {
     color: rgb(162, 162, 162)
+}
+
+.question_title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.qiestion_header {
+    background-color: rgb(220, 220, 220);
+    border-top: 1px solid rgb(27, 27, 27);
+    border-bottom: 1px solid rgb(27, 27, 27);
+}
+.qiestion_header > p {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.answers > li {
+    list-style: url('../icons/unchecked.png');
 }
