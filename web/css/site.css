@@ -1,4 +1,4 @@
-main > .container {
+main>.container {
     padding: 70px 15px 20px;
 }
 
@@ -8,7 +8,7 @@ main > .container {
     height: 60px;
 }
 
-.footer > .container {
+.footer>.container {
     padding-right: 15px;
     padding-left: 15px;
 }
@@ -19,7 +19,8 @@ main > .container {
 }
 
 /* add sorting icons to gridview sort links */
-a.asc:after, a.desc:after {
+a.asc:after,
+a.desc:after {
     content: '';
     left: 3px;
     display: inline-block;
@@ -33,6 +34,7 @@ a.asc:after, a.desc:after {
 #header {
     margin-bottom: 1em;
 }
+
 a.asc:after {
     border-bottom: solid 7px #212529;
     border-top-width: 0;
@@ -48,9 +50,7 @@ a {
     color: rgb(27, 27, 27);
 }
 
-th
-
-.grid-view th {
+th .grid-view th {
     white-space: nowrap;
 }
 
@@ -64,7 +64,7 @@ nav {
     background-color: rgb(27, 27, 27);
 }
 
-#main > div > nav {
+#main>div>nav {
     background-color: white;
 }
 
@@ -77,37 +77,38 @@ nav {
 }
 
 /* align the logout "link" (button in form) of the navbar */
-.nav li > form > button.logout {
+.nav li>form>button.logout {
     padding-top: 7px;
     color: rgba(255, 255, 255, 0.5);
 }
 
 @media(max-width:767px) {
-    .nav li > form > button.logout {
-        display:block;
+    .nav li>form>button.logout {
+        display: block;
         text-align: left;
         width: 100%;
         padding: 10px 0;
     }
 }
 
-.nav > li > form > button.logout:focus,
-.nav > li > form > button.logout:hover {
+.nav>li>form>button.logout:focus,
+.nav>li>form>button.logout:hover {
     text-decoration: none;
     color: rgba(255, 255, 255, 0.75);
 }
 
-.nav > li > form > button.logout:focus {
+.nav>li>form>button.logout:focus {
     outline: none;
 }
 
 #w0 {
     margin-bottom: 20px;
 }
+
 footer {
     position: fixed;
     display: flex;
-    left: 0; 
+    left: 0;
     bottom: 0;
     background-color: #bdbdbd;
     width: 100vw;
@@ -117,10 +118,10 @@ footer {
 }
 
 h5 {
-    color:rgba(96, 96, 96, 0.5)
+    color: rgba(96, 96, 96, 0.5)
 }
 
-main > div > div > p > .btn  {
+main>div>div>p>.btn {
     box-shadow: 0px 2px 10px black;
     min-width: 200px;
 }
@@ -129,9 +130,14 @@ hr {
     color: gray
 }
 
-.form-group > .btn {
+.form-group>.btn {
     box-shadow: 0px 2px 10px black;
     min-width: 180px;
     max-width: 180px;
     margin-top: 10px;
+}
+
+table {
+    table-layout: auto !important;
+    width: 100%;
 }

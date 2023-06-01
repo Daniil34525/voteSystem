@@ -1,8 +1,7 @@
-table tr td:nth-child(6) {
+table tr td:nth-child(3) {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: nowrap;
-
 }

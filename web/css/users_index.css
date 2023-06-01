@@ -4,5 +4,5 @@ table tr td:nth-child(8) {
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: nowrap;
-    width: 150px;
+    min-width: 150px;
 }

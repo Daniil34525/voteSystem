@@ -14,6 +14,7 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 
+$this->registerCssFile('@web/css/answers_index.css');
 $this->title = $title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
