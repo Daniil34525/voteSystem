@@ -27,6 +27,27 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <?php $css = <<<CSS
+    .loader {
+        border: 10px solid #1983c9; /* Цвет обводки */
+        border-top: 10px solid #ffffff; /* Цвет верхней границы */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite; /* Анимация вращения */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+CSS;
+    $this->registerCss($css); ?>
 </head>
 <body>
 <?php

@@ -4,11 +4,13 @@ namespace app\controllers;
 
 use app\models\Bulletins;
 use app\models\BulletinSearch;
+use app\models\Votings;
 use yii\behaviors\TimestampBehavior;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * BulletinsController implements the CRUD actions for Bulletins model.
@@ -18,7 +20,7 @@ class BulletinsController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -34,7 +36,7 @@ class BulletinsController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'view', 'update', 'create', 'delete'], // действия, к которым разрешен доступ
+                            'actions' => ['index', 'view', 'update', 'create', 'delete', 'select-bulletin'], // действия, к которым разрешен доступ
                             'roles' => ['admin'], // разрешен доступ для авторизованных администраторов
                         ],
                         [
@@ -53,7 +55,7 @@ class BulletinsController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new BulletinSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -67,7 +69,7 @@ class BulletinsController extends Controller
     /**
      * Creates a new Bulletins model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -90,10 +92,10 @@ class BulletinsController extends Controller
      * Updates an existing Bulletins model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id Код бюллетени
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -110,19 +112,49 @@ class BulletinsController extends Controller
      * Deletes an existing Bulletins model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id Код бюллетени
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
-    public function actionView($id) {
-        $model = $this->findModel($id); 
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionView(int $id = null)
+    {
+        if(is_null($id)) $id = $this->request->post()['questionId'];
+        $model = $this->findModel($id);
+
+        if ($this->request->isAjax)
+            return $this->renderAjax('view', ['model' => $model]);
+
         return $this->render('view', ['model' => $model]);
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionSelectBulletin(): Response
+    {
+        $votingId = $this->request->post()['votingId'];
+        $voting = Votings::find()->where(['id' => $votingId])->one();
+        foreach ($voting->bulletins as $bulletin) {
+            if ($bulletin->is_selected) {
+                $bulletin->is_selected = false;
+                if (!$bulletin->save()) return $this->asJson(['result' => 'err']);
+            }
+        }
+        $bulletinId = $this->request->post()['bulletinId'];
+        $model = $this->findModel($bulletinId);
+        $model->is_selected = true;
+        if ($model->save())
+            return $this->asJson(['result' => 'ok']);
+        return $this->asJson(['result' => 'err']);
     }
 
     /**

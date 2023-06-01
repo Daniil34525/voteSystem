@@ -19,12 +19,17 @@ class m230524_195146_create_trigger_users_hiddens_id_unique extends Migration
 CREATE FUNCTION trigger_unique_user_id()
 RETURNS TRIGGER AS $$
 DECLARE
-    max_id INTEGER;
+    max_u_id INTEGER;
+    max_h_id INTEGER;
 BEGIN
     IF (TG_OP = 'INSERT') THEN 
-        SELECT MAX(ID) INTO max_id FROM HIDDENS;
-        IF NEW.ID <= max_id THEN
-            NEW.ID := max_id + 1;
+        SELECT MAX(ID) INTO max_h_id FROM HIDDENS;
+        SELECT MAX(ID) INTO max_u_id FROM USERS;
+        IF max_u_id < max_h_id THEN
+            max_u_id := max_h_id;
+        END IF;
+        IF NEW.ID <= max_u_id THEN
+            NEW.ID := max_u_id + 1;
         END IF;
         RETURN NEW;
     END IF;
@@ -48,12 +53,17 @@ SQL;
 CREATE FUNCTION trigger_unique_hidden_id()
 RETURNS TRIGGER AS $$
 DECLARE
-    max_id INTEGER;
+    max_u_id INTEGER;
+    max_h_id INTEGER;
 BEGIN
     IF (TG_OP = 'INSERT') THEN 
-        SELECT MAX(ID) INTO max_id FROM USERS;
-        IF NEW.ID <= max_id THEN
-            NEW.ID := max_id + 1;
+        SELECT MAX(ID) INTO max_h_id FROM HIDDENS;
+        SELECT MAX(ID) INTO max_u_id FROM USERS;
+        IF max_h_id < max_u_id THEN
+            max_h_id := max_u_id;
+        END IF;
+        IF NEW.ID <= max_h_id THEN
+            NEW.ID := max_h_id + 1;
         END IF;
         RETURN NEW;
     END IF;

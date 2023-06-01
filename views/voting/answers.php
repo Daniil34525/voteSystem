@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
                                 <?php
                                 $userId = Yii::$app->user->id;
                                 $role = Yii::$app->authManager->getRolesByUser($userId);
-                                if (in_array($userId, $answer->voters[array_key_first($role)])) { ?>
+                                if (!is_null($answer->voters) && in_array($userId, $answer->voters[array_key_first($role)])) { ?>
                                     <?= Html::tag('div', $answer->title, ['class' => 'bg-success']) ?>
                                 <?php } else { echo $answer->title; } ?>
                             <?php endforeach; ?>
