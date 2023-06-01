@@ -15,14 +15,16 @@ use yii\helpers\Url;
         <p class="bd-title">Голосование №<?= $model->id ?></p>
     </div>
     <div class="card">
-            <?php
-            foreach ($model->bulletins as $bulletin) {
-                $link = Html::a($bulletin->title, '#', ['class'=> 'viewBulletin', 'data-model-id' => $bulletin->id]);
-                $radio = Html::radio('bulletin', false, ['value' => $bulletin->id]);
-                echo Html::tag('div', $link . $radio, ['style' => 'display: flex;align-items: center;justify-content: space-evenly;']);
-            }
-            ?>
+        <?php
+        foreach ($model->bulletins as $bulletin) {
+            $link = Html::a($bulletin->title, '#', ['class' => 'viewBulletin', 'data-model-id' => $bulletin->id]);
+            $radio = Html::radio('bulletin', false, ['value' => $bulletin->id]);
+            echo Html::tag('div', $link . $radio, ['style' => 'display: flex;align-items: center;justify-content: space-evenly;']);
+        }
+        ?>
     </div>
+    <div class="loader" id="loader"></div>
+<hr>
 <?php
 // Формирование модельного окна, которое на данный момент скрыто от пользователя:
 Modal::begin([
@@ -38,21 +40,31 @@ Modal::end();
 $urlSelect = Url::to(['/bulletins/select-bulletin']);
 $urlView = Url::to(['/bulletins/view']);
 $js = <<<JS
+$(document).ajaxStart(function() {
+  $('#loader').show();
+});
+
+// Скройте анимацию загрузки после завершения AJAX-запроса
+$(document).ajaxStop(function() {
+  $('#loader').hide();
+});
+
 $('input[type=radio][name=bulletin]').on('change', function () {
     let radioVal = $('input[type=radio][name=bulletin]:checked').val();
+
     $.ajax({
         url: '$urlSelect',
         type: 'post',
         data: {
             'bulletinId': radioVal,
             'votingId': '$model->id'
-             },
+            },
         success: function(data) {
-            alert('успешно выбрано');
+            
         }
     })
 })
-$('.viewBulletin').click(function(){
+$('.viewBulletin').click(function() {
     // Тело метода-обработчика:
     // Инициализация переменной modelId значением из атрибута, который сохранен в кнопке и содержит id текущей модели:
     var modelId = $(this).data('model-id');

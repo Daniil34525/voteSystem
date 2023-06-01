@@ -9,34 +9,35 @@ $this->registerCssFile('@web/css/create_voters.css')
 /** @var app\models\VotersList $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
-<div class="voters-list-form">
+    <div class="voters-list-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->hiddenInput(); ?>
+        <?= $form->field($model, 'id')->hiddenInput(); ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]); ?>
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]); ?>
 
-    <div class="card" id="first">
-        <label for="choice">Выбор типа пользователя</label>
-        <select id="choice" class="form-select">
-            <option value="default" disabled <?= $model->status == null ? 'selected' : '' ?>>
-                Выберите тип пользователя
-            </option>
-            <option value="users">Пользователь</option>
-            <option value="hiddens">Анонимный пользователь</option>
-        </select>
+        <div class="card" id="first">
+            <label for="choice">Выбор типа пользователя</label>
+            <select id="choice" class="form-select">
+                <option value="default" disabled <?= $model->status == null ? 'selected' : '' ?>>
+                    Выберите тип пользователя
+                </option>
+                <option value="users">Пользователь</option>
+                <option value="hiddens">Анонимный пользователь</option>
+            </select>
+        </div>
+        <div class="card" id="userChoice">
+        </div>
     </div>
-    <div class="card" id="userChoice">
+    <div class="form-group">
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
-</div>
-<div class="form-group">
-    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-</div>
 
 <?php ActiveForm::end(); ?>
 
-</div>
+    </div>
+    <div class="loader" id="loader"></div>
 <?php
 $urlUser = Url::to(['users/choice-user']);
 $urlHiddens = Url::to(['hiddens/choice-hiddens']);
@@ -44,6 +45,15 @@ $modelId = $model->id;
 $status = $model->status;
 $urlCreateHiddens = Url::to(['/hiddens/create-hiddens-for-voters-list']);
 $js = <<<JS
+$(document).ajaxStart(function() {
+  $('#loader').show();
+});
+
+// Скройте анимацию загрузки после завершения AJAX-запроса
+$(document).ajaxStop(function() {
+  $('#loader').hide();
+});
+
 $(document).ready(function() {
     let choice = $('#choice');
     choice.val('$status');
