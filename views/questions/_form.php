@@ -61,12 +61,20 @@ Modal::begin([
 echo '<div id="modalContent"></div>';
 Modal::end();
 ?>
-
+<div class="loader" id="loader"></div>
 <?php
-
 $url = Url::to('modal-content');
 // Регистрация JavaScript для открытия модального окна
 $js = <<< JS
+$(document).ajaxStart(function() {
+  $('#loader').show();
+});
+
+// Скройте анимацию загрузки после завершения AJAX-запроса
+$(document).ajaxStop(function() {
+  $('#loader').hide();
+});
+
 // При нажатии на кнопку с id "createAnswer": 
 $('#createAnswer').click(function(){
     // Тело метода-обработчика:

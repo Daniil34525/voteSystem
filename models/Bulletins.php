@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $id Код бюллетени
  * @property string $title Название
+ * @property bool $is_selected Выбран ли
  * @property int $created_at Дата создания
  *
  * @property BulletinsList[] $bulletinsLists
@@ -47,6 +48,7 @@ class Bulletins extends ActiveRecord
             ['id', 'integer'], 
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
+            ['is_selected', 'boolean'],
         ];
     }
 

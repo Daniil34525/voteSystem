@@ -1,6 +1,7 @@
 <?php
 
-/** @var yii\web\View $this
+/**
+ * @var yii\web\View $this
  * @var $searchModel VotingSearch
  * @var $dataProvider yii\data\ActiveDataProvider
  * @var $title string
@@ -47,10 +48,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => ActionColumn::class,
-                'template' => '{update} {delete}',
+                'template' => '{control} {update} {delete}',
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
-                        return Html::a(Html::img(""), Url::to(['update-create', 'id' => $key]));
+
+                        return Html::a('Обновить', Url::to(['update-create', 'id' => $key]));
+                    },
+                    'control' => function ($url, $model, $key) {
+                        return Html::a('Управление', Url::to(['control', 'id' => $key]));
+
                     }
                 ]
             ],
@@ -58,6 +64,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?php Pjax::end() ?>
- 
-
 </div>

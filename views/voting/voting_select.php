@@ -1,6 +1,7 @@
 <?php
 
 /** @var yii\web\View $this
+
  * @var Votings $model
  * @var $data [[voters_lists] => [votings]]
  */
@@ -12,6 +13,7 @@ use app\models\VotingTypes;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 $this->title = 'Выбор текущего голосования';
 
 $this->registerCssFile('@web/css/votings_list.css');
@@ -21,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="content">
+
     <?php foreach ($data as $voters_list) : ?>
         <?php foreach ($voters_list as $voting) : ?>
             <div class="vote">
@@ -37,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <path fill="currentColor" d="M573 241C518 136 411 64 288 64S58 136 3 241a32 32 0 000 30c55 105 162 177 285 177s230-72 285-177a32 32 0 000-30zM288 400a144 144 0 11144-144 144 144 0 01-144 144zm0-240a95 95 0 00-25 4 48 48 0 01-67 67 96 96 0 1092-71z"></path>
                         </svg> </a>
                 </div>
+
             </div>
         <?php endforeach; ?>
     <?php endforeach; ?>
