@@ -1,53 +1,35 @@
 <?php
 
+use app\models\Users;
+
 /** @var yii\web\View $this */
 
+$this->registerCssFile('@web/css/start_page.css');
 $this->title = 'My Yii Application';
 ?>
-<div class="site-index">
+<div class="content">
 
-    <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4"><?= Yii::$app->user->isGuest ? 'Войдите!' : 'Успех'?></h1>
 
-        <p class="lead"><?= Yii::$app->user->id ?></p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+    <div class="hello">
+        <?php if (Yii::$app->user->isGuest) : ?>
+            <h1>Система электронного голосования КГУ.</h1>
+            <br />
+            <p> Требуется выполнить вход в систему. </p>
+        <?php else : ?>
+            <h1>Система электронного голосования КГУ.</h1>
+            <?php $current_user = Users::find()->where(["id" => Yii::$app->user->id])->one(); ?>
+            </br>
+            <h2> Здравствуйте, <?= $current_user->name ?> <?= $current_user->middle_name ?>!</h2>
     </div>
 
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+    <div class='algorithm'>
+        <h4> Алгоритм работы с системой:</h4>
+        <ol>
+            <li> Формирование вопросов и ответов </li>
+            <li> Создание бюллетений. </li>
+            <li> Формирование списка голосующий: пользователи/анонимные участники. </li>
+            <li> Создание голосования, в котором происходит выбор бюллетений на голосования, а также списка голосующих. </li>
+        </ol>
     </div>
+<?php endif; ?>
 </div>

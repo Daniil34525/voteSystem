@@ -1,0 +1,25 @@
+.login {
+    display: flex;
+    width: 35%;
+    padding: 20px;
+    flex-direction: column;
+    border: 2px solid rgb(27, 27,27);
+    border-radius: 20px;
+}
+
+.help-block {
+    color: rgb(186, 0, 0)
+}
+
+h1 {
+    text-align: center;
+}
+
+.btn-success {
+    min-width: 100% !important;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
