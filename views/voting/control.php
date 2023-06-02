@@ -23,7 +23,6 @@ use yii\helpers\Url;
         }
         ?>
     </div>
-    <div class="loader" id="loader"></div>
 <hr>
 <?php
 // Формирование модельного окна, которое на данный момент скрыто от пользователя:

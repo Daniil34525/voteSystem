@@ -50,6 +50,7 @@ CSS;
     $this->registerCss($css); ?>
 </head>
 <body>
+<div class="loader" id="loader"></div>
 <?php
 
 NavBar::begin([

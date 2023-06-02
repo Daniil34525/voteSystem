@@ -37,7 +37,6 @@ $this->registerCssFile('@web/css/create_voters.css')
 <?php ActiveForm::end(); ?>
 
     </div>
-    <div class="loader" id="loader"></div>
 <?php
 $urlUser = Url::to(['users/choice-user']);
 $urlHiddens = Url::to(['hiddens/choice-hiddens']);

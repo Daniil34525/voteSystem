@@ -14,7 +14,6 @@ use yii\web\Response;
 use app\models\BulletinsList;
 use app\models\Users;
 use app\models\VotersList;
-use app\models\UsersList;
 
 
 class VotingController extends Controller
@@ -125,7 +124,19 @@ class VotingController extends Controller
                     $answer->voters = $voters;
                     $answer->save();
                 }
-            return $this->redirect('index');
+            if (is_iterable($post['answer_radio'])) {
+                $answersIds = $post['answer_radio'];
+                foreach ($answersIds as $key => $ids) {
+                    $answer = Answers::find()->where(['id' => $key])->one();
+                    $voters = $answer->voters;
+                    $userId = Yii::$app->user->id;
+                    $a = Yii::$app->authManager->getRolesByUser($userId);
+                    $voters[array_key_first($a)][] = $userId;
+                    $answer->voters = $voters;
+                    $answer->save();
+                }
+            }
+            return $this->redirect(['elections', 'id' => $id]);
         }
         $votingModel = Votings::find()->where(['id' => $id])->one();
         return $this->render('elections', ['votingModel' => $votingModel]);
@@ -144,7 +155,6 @@ class VotingController extends Controller
     }
 
 
-
     /**
      * Экшен позволяет выбирать из доступных голосований
      * @return string
@@ -160,15 +170,13 @@ class VotingController extends Controller
 
         $user = Users::find()->where(['id' => Yii::$app->user->id])->one();
 
-        // Получение массива списков участников голосований, к которым относится текущеий пользователь:
+        // Получение массива списков участников голосований, к которым относится текущий пользователь:
         $votersList = $user->voterLists; // Массив моделей VotersList:
 
         $enabled_votings = [];
 
         // Для каждого элемента из массива моделей VotersList:
         foreach ($votersList as $list) {
-
-
             $enabled_votings[] = $list->votings;
         }
         // $enabled_votings = {
@@ -185,16 +193,25 @@ class VotingController extends Controller
         else return $this->redirect('index');
     }
 
+    /**
+     * возвращается выбранная администратором бюллетень
+     * @param $votingId
+     * @param $bulletinId
+     * @return Response
+     */
     public function actionSelectedBulletin($votingId, $bulletinId): Response
     {
         $modelBulletin = Bulletins::find()->where(['id' => $bulletinId])->one();
 
-        if ($modelBulletin->is_selected) return $this->asJson(['result' => 'no']);
+        if ($modelBulletin->is_selected)
+            if ($modelBulletin->getSelected()) return $this->asJson(['result' => 'ok', 'html' => 'Вы уже ответили на эту бюллетень!', 'id' => $modelBulletin->id]);
+            else return $this->asJson(['result' => 'no']);
         $voting = Votings::find()->where(['id' => $votingId])->one();
         if (!is_iterable($voting->bulletins)) return $this->asJson(['result' => 'no']);
         foreach ($voting->bulletins as $bulletin) {
             if ($bulletin->is_selected) $modelBulletin = $bulletin;
         }
+        if ($modelBulletin->getSelected()) return $this->asJson(['result' => 'ok', 'html' => 'Вы уже ответили на эту бюллетень!', 'id' => $modelBulletin->id]);
         $divQuestion = '';
         if (!is_iterable($modelBulletin->questions)) $divQuestion = 'В этой бюллетени нет вопросов!';
         else foreach ($modelBulletin->questions as $question) {
@@ -203,7 +220,10 @@ class VotingController extends Controller
             $divAnswer = '';
             if (!is_iterable($question->answers)) $divAnswer = 'В этом вопросе нет представленных ответов!';
             else foreach ($question->answers as $answer) {
-                $checkbox = Html::checkbox("answer[$answer->id]", false, ['id' => 'answer' . $answer->id]);
+                if ($question->type_id == 1)
+                    $checkbox = Html::radio("answer_radio[$answer->id]", false, ['value' => $answer->id]);
+                else
+                    $checkbox = Html::checkbox("answer[$answer->id]", false, ['id' => 'answer' . $answer->id]);
                 $label = Html::label($answer->title, 'answer[' . $answer->id . ']');
                 $divAnswer .= Html::tag('div', $checkbox . $label);
             }

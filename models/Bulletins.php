@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -78,6 +79,21 @@ class Bulletins extends ActiveRecord
         }
 
         return $data;
+    }
+
+    public function getSelected(): bool
+    {
+        foreach ($this->questions as $question){
+            foreach ($question->answers as $answer){
+                $role = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
+                if(!is_null($answer->voters) && in_array(Yii::$app->user->id, $answer->voters[array_key_first($role)]))
+                {
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }
 
     /**
