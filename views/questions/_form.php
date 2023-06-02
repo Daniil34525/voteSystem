@@ -61,7 +61,7 @@ Modal::begin([
 echo '<div id="modalContent"></div>';
 Modal::end();
 ?>
-<div class="loader" id="loader"></div>
+
 <?php
 $url = Url::to('modal-content');
 // Регистрация JavaScript для открытия модального окна

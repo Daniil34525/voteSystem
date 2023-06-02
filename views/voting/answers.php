@@ -1,7 +1,6 @@
 <?php
 
 use app\models\Votings;
-use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
@@ -22,8 +21,6 @@ $this->registerCssFile('@web/css/show_voting_answers.css');
             </div>
             <div class="bulletin_card_body">
                 <?php foreach ($bulletin->questions as $question) : ?>
-
-
                     <div class='qiestion_header'>
                         <p class='question_title'> <?= $question->question_title; ?> </p>
                         <p><?= $question->overview; ?> </p>
@@ -42,10 +39,7 @@ $this->registerCssFile('@web/css/show_voting_answers.css');
                                 <?php endif; ?>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
                     </ul>
-
-
                 <?php endforeach; ?>
             </div>
 
