@@ -19,3 +19,13 @@ $this->params['breadcrumbs'][] = 'Редактирование';
     ]) ?>
 
 </div>
+
+<?php
+
+$js = <<< JS
+    $('#users-password_hash').attr('disabled','disabled').attr('type', 'password');
+JS; 
+$position = $this::POS_END;
+
+$this->registerJs($js, $position);
+?>

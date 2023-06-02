@@ -7,12 +7,12 @@ $db = require __DIR__ . '/test_db.php';
  */
 return [
     'id' => 'basic-tests',
+    'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'language' => 'ru-RU',
     'components' => [
         'db' => $db,
         'mailer' => [

@@ -1,0 +1,23 @@
+.votings_main {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.voting {
+    padding: 20px; 
+    border: 2px solid rgb(27, 27,27);
+    border-radius: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.voting_head {
+    border-bottom: 2px solid rgb(27,27,27);
+    margin-bottom: 10px;
+}
+
+input[type='radio'] {
+    margin-right: 10px;
+}
+

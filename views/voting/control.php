@@ -10,26 +10,36 @@ use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+$this->title = 'Котроль бюллетеней голосования';
+$this->registerCssFile('@web/css/voting_control.css');
+
+
 ?>
-    <div class="card-title">
-        <p class="bd-title">Голосование №<?= $model->id ?></p>
+
+<div class='votings_main'>
+    <div class="voting">
+        <div class="voting_head">
+            <h3> Голосование №<?= $model->id ?></h3>
+        </div>
+        <div class="bulletins">
+            <?php
+            foreach ($model->bulletins as $bulletin) {
+                $radio = Html::radio('bulletin', false, ['value' => $bulletin->id, 'class' => 'form-check-input']);
+                $link = Html::a($bulletin->title, '#', ['class' => 'viewBulletin', 'data-model-id' => $bulletin->id]);
+                echo Html::tag('div', $radio . $link);
+            }
+            ?>
+        </div>
     </div>
-    <div class="card">
-        <?php
-        foreach ($model->bulletins as $bulletin) {
-            $link = Html::a($bulletin->title, '#', ['class' => 'viewBulletin', 'data-model-id' => $bulletin->id]);
-            $radio = Html::radio('bulletin', false, ['value' => $bulletin->id]);
-            echo Html::tag('div', $link . $radio, ['style' => 'display: flex;align-items: center;justify-content: space-evenly;']);
-        }
-        ?>
-    </div>
-    <div class="loader" id="loader"></div>
-<hr>
+</div>
+<div class="loader" id="loader"></div>
+
+
 <?php
 // Формирование модельного окна, которое на данный момент скрыто от пользователя:
 Modal::begin([
     // Присвоение атрубутов модальному окну:
-    'title' => '<h4 class="modal-title">Создать ответ</h4>',    // Заголовок
+    'title' => '<h4 class="modal-title">Просмотр бюллетени</h4>',    // Заголовок
     'id' => 'viewBulletinModal',                                // Присовоение id на странице данному окну.
 ]);
 
