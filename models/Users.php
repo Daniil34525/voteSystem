@@ -98,9 +98,9 @@ class Users extends ActiveRecord implements IdentityInterface
         return static::findOne(['email' => $email]);
     }
 
-    public static function findByCode($code): ?Hiddens
+    public static function findByCode($code): ?Users
     {
-        return Hiddens::findOne(['code' => $code]);
+        return Users::findOne(['email' => $code]);
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
@@ -111,11 +111,11 @@ class Users extends ActiveRecord implements IdentityInterface
             return $user;
         }
 
-        // Поиск скрытого пользователя по токену доступа
-        $hiddenUser = Hiddens::findOne(['access_token' => $token]);
-        if ($hiddenUser !== null) {
-            return $hiddenUser;
-        }
+//        // Поиск скрытого пользователя по токену доступа
+//        $hiddenUser = Hiddens::findOne(['access_token' => $token]);
+//        if ($hiddenUser !== null) {
+//            return $hiddenUser;
+//        }
 
         // Если пользователь не найден, возвращаем null
         return null;
@@ -125,6 +125,7 @@ class Users extends ActiveRecord implements IdentityInterface
     {
         if ($this->roleType->title == 'Администратор')
             $this->role = 'admin';
+        elseif ($this->role_type_id = 3) $this->role = 'hidden';
         else $this->role = 'user';
         return $this->role;
     }

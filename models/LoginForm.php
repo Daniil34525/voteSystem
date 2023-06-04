@@ -72,10 +72,10 @@ class LoginForm extends Model
         return $this->_user;
     }
 
-    public function getHidden(): ?Hiddens
+    public function getHidden(): ?Users
     {
         if ($this->_user === null) {
-            $this->_user = Hiddens::findByCode($this->code);
+            $this->_user = Users::findByCode($this->code);
         }
 
         return $this->_user;

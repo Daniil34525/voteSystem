@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Hiddens;
 use app\models\HiddenSearch;
 use app\models\LoginForm;
+use app\models\Users;
 use app\models\VotersList;
 use Yii;
 use yii\filters\AccessControl;
@@ -65,7 +66,7 @@ class HiddensController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    
+
     }
 
     /**
@@ -95,6 +96,8 @@ class HiddensController extends Controller
     public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
+        $user = Users::find()->where(['id' => $id])->one();
+        $user->delete();
 
         return $this->redirect(['index']);
     }
@@ -116,20 +119,19 @@ class HiddensController extends Controller
      */
     public function actionLogin()
     {
-        if (Yii::$app->user->isGuest)
-            if (Yii::$app->hidden->isGuest) {
-                $model = new LoginForm(['typeUser' => 'hidden']);
+        if (Yii::$app->user->isGuest) {
+            $model = new LoginForm(['typeUser' => 'hidden']);
 
-                // Проверка, была ли отправлена форма
-                if ($model->load(Yii::$app->request->post()) && $model->login()) {
-                    // Авторизация прошла успешно, перенаправление на другую страницу
-                    return $this->redirect(['site/index']);
-                }
-
-                return $this->render('login', [
-                    'model' => $model,
-                ]);
+            // Проверка, была ли отправлена форма
+            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                // Авторизация прошла успешно, перенаправление на другую страницу
+                return $this->redirect(['site/index']);
             }
+
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
         return $this->redirect(['/bulletins/index']);
     }
 

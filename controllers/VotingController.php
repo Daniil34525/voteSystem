@@ -39,7 +39,7 @@ class VotingController extends Controller
                         [
                             'allow' => true,
                             'actions' => ['select', 'selected-bulletin'],
-                            'roles' => ['user'],
+                            'roles' => ['user', 'hidden'],
                         ],
                     ],
                 ],
