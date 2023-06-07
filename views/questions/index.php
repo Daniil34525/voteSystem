@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Bulletins;
 use app\models\Questions;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -31,7 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'id',
             'question_title',
-            'bulletin_id',
+            [
+                'attribute' => 'bulletin_id',
+                'value' => function (Questions $model) {
+                    return $model->bulletin->title;
+                }
+            ],
             'overview:text',
             'type_id',
             //'answer',

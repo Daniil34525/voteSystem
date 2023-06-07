@@ -26,6 +26,7 @@ class UserSearch extends Users
             [['role_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RoleTypes::class, 'targetAttribute' => ['role_type_id' => 'id']],
         ];
     }
+
     /**
      * {@inheritdoc}
      */
@@ -44,7 +45,7 @@ class UserSearch extends Users
      */
     public function search($params)
     {
-        $query = Users::find();
+        $query = Users::find()->where(['!=', 'role_type_id', 3]);
 
         // add conditions that should always apply here
 

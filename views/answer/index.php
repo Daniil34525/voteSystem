@@ -9,9 +9,11 @@
 
 use app\models\Answers;
 use app\models\TypeSearch;
+use app\models\Users;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->registerCssFile('@web/css/answers_index.css');
@@ -45,22 +47,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                // TODO: Надо будет обсудить вывод тех, кто проголосовал
                 'format' => 'html',
                 'attribute' => 'voters',
-                'value' => function (Answers $model) {
+                'value' => function ($val) {
                     $result = '';
+                    $voters = $val['voters'];
                     // Вывод ID пользователей
-                    if (isset($model['voters']['users'])) {
-                        foreach ($model['voters']['users'] as $userId) {
-                            $result .= "User ID: " . $userId . "<br>";
+                    if (isset($voters['user'])) {
+                        foreach ($voters['user'] as $userId) {
+                            $user = Users::find()->where(['id' => $userId])->one();
+                            $result .= Html::a($user->getMiddleNameAndInitials(), Url::to(['/users/view', 'id' => $userId])) . "<br>";
                         }
                     }
 
                     // Вывод ID скрытых элементов
-                    if (isset($model['voters']['hiddens'])) {
-                        foreach ($model['voters']['hiddens'] as $hiddenId) {
-                            $result .= "Hidden ID: " . $hiddenId . "<br>";
+                    if (isset($voters['hidden'])) {
+                        foreach ($voters['hidden'] as $hiddenId) {
+                            $result .= "Аноним: " . $hiddenId . "<br>";
                         }
                     }
                     return $result;

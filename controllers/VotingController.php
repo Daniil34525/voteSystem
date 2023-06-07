@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Answers;
 use app\models\Bulletins;
+use app\models\Hiddens;
 use app\models\Votings;
 use app\models\VotingSearch;
 use Yii;
@@ -162,13 +163,10 @@ class VotingController extends Controller
     public function actionSelect(): string
 
     {
-        /**
-         * @var Users $user
-         * @var VotersList[] $votersList
-         */
-
-
-        $user = Users::find()->where(['id' => Yii::$app->user->id])->one();
+//        $a = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
+        if (array_key_first(Yii::$app->authManager->getRolesByUser(Yii::$app->user->id)) == 'hidden')
+            $user = Hiddens::find()->where(['id' => Yii::$app->user->id])->one();
+        else $user = Users::find()->where(['id' => Yii::$app->user->id])->one();
 
         // Получение массива списков участников голосований, к которым относится текущий пользователь:
         $votersList = $user->voterLists; // Массив моделей VotersList:
@@ -221,7 +219,7 @@ class VotingController extends Controller
             if (!is_iterable($question->answers)) $divAnswer = 'В этом вопросе нет представленных ответов!';
             else foreach ($question->answers as $answer) {
                 if ($question->type_id == 1)
-                    $checkbox = Html::radio("answer_radio[$answer->id]", false, ['value' => $answer->id]);
+                    $checkbox = Html::radio("answer_radio", false, ['value' => $answer->id]);
                 else
                     $checkbox = Html::checkbox("answer[$answer->id]", false, ['id' => 'answer' . $answer->id]);
                 $label = Html::label($answer->title, 'answer[' . $answer->id . ']');
